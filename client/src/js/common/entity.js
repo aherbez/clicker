@@ -16,6 +16,7 @@ export class Entity {
 
         this.rotation = 0;
         this.children = [];
+        this.visible = true;
     }
 
     // no-op in base class
@@ -45,9 +46,11 @@ export class Entity {
 
     // handles local position and passes rendering down to children
     _render(ctx) {
+        if (!this.visible) return;
+
         ctx.save();
         ctx.translate(this.pos.x, this.pos.y);
-
+        
         this.render(ctx);
 
         this.children.forEach(c => {

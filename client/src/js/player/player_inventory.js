@@ -29,6 +29,11 @@ export class PlayerInventory {
         this.money -= cost;
     }
 
+    addFunds(funds) {
+        if (funds < 0) return;
+        this.money += funds;
+    }
+
     canAfford(cost) {
         return (cost <= this.money);
     }
@@ -105,6 +110,13 @@ export class PlayerInventory {
             return this.businessStates.get(bID).fillAmount > 0.99;
         }
         return false;
+    }
+
+    maybeCollectFunds(bID) {
+        if (this.canCollect(bID)) {
+            const moneyCollected = this.businessStates.get(bID).maybeCollect();
+            this.addFunds(moneyCollected);
+        }
     }
 
     // update state of each business

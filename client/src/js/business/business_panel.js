@@ -1,6 +1,7 @@
 import { BusinessData } from './business_data';
 import { Entity } from '../common/entity';
 import { formatMoney } from '../common/utils';
+import { Button } from '../ui/button';
 
 const WIDTH = 380;
 const HEIGHT = 150;
@@ -15,15 +16,44 @@ export class BusinessPanel extends Entity {
             x: WIDTH,
             y: HEIGHT
         }
+
+        this.setupButtons();
+    }
+
+    setupButtons() {
+        this.buyButton = new Button({
+            label: 'buy',
+            width: 100,
+            callback: () => {this.attemptPurchase();}
+        });
+        this.buyButton.setPos(120, 70);
+        this.children.push(this.buyButton);
+
+        this.collectButton = new Button({
+            label: 'collect',
+            width: 100,
+            callback: () => {this.attemptCollect();}
+        });
+        this.collectButton.setPos(10,70);
+        this.collectButton.enabled = false;
+        this.children.push(this.collectButton);
     }
 
     onClick(pos) {
         // only buy on click if it's the first purchase
         // subsequent purchases require clicking on the "buy" button, specifically
         const owned = this.registry.playerInventory.numOwned(this.data.id);
-        if (owned < 1) {
-            this.registry.playerInventory.maybePurchaseBusiness(this.data.id);
-        }
+        if (owned > 0) return;
+        
+        this.attemptPurchase();
+    }
+
+    attemptPurchase() {
+        this.registry.playerInventory.maybePurchaseBusiness(this.data.id);
+    }
+
+    attemptCollect() {
+        this.registry.playerInventory.maybeCollectFunds(this.data.id);
     }
 
     _drawName(ctx) {
@@ -60,9 +90,11 @@ export class BusinessPanel extends Entity {
     }
 
     _renderStatus(ctx) {
+        const { playerInventory } = this.registry;
+
         ctx.save();
 
-        const owned = this.registry.playerInventory.numOwned(this.data.id);
+        const owned = playerInventory.numOwned(this.data.id);
 
         // draw numOwned
         {
@@ -75,7 +107,7 @@ export class BusinessPanel extends Entity {
 
         // render progress bar
         ctx.save();
-        const fillAmount = this.registry.playerInventory.getProgress(this.data.id);
+        const fillAmount = playerInventory.getProgress(this.data.id);
         ctx.fillStyle = '#00AA00';
 
         ctx.fillRect(10, 30, (fillAmount * 100), 30);
@@ -87,12 +119,24 @@ export class BusinessPanel extends Entity {
         ctx.restore();
     }
 
+    updateButtons() {
+        const { playerInventory } = this.registry;
+
+        const owned = playerInventory.numOwned(this.data.id);
+        this.buyButton.visible = (owned > 0);
+        this.collectButton.visible = (owned > 0);    
+
+        this.buyButton.enabled = playerInventory.canAffordBusiness(this.data.id);
+        this.collectButton.enabled = playerInventory.canCollect(this.data.id);
+    }
+
     render(ctx) {
+        this.updateButtons();
+
         ctx.beginPath();
         ctx.strokeRect(0, 0, WIDTH, HEIGHT);
 
         const owned = this.registry.playerInventory.numOwned(this.data.id);
-        
         if (owned > 0) {
             this._renderStatus(ctx);
         } else {

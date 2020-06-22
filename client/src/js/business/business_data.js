@@ -9,8 +9,7 @@ export class BusinessData {
         this.costMult = data.costMult || 1;
         this.time = data.time || 10;
         this.icon = data.icon || 'null.png';
-        this.moneyPerFill = data.moneyPerFill || 1;
-
+        this.moneyPerFill = data.funds || 1;
     }
 }
 
@@ -47,17 +46,18 @@ export class BusinessState {
     }
 
     maybeCollect() {
-        let collected = false;
+        let collected = 0;
         if (this.fillAmount > 0.99) {
             this.resetTimer();
-            collected = true;
+            collected = (this.moneyPerFill * this.numOwned);
+            console.log(`collected ${this.moneyPerFill} from ${this.numOwned} for a total of ${collected}`);
         }
         return collected;
     }
 
     tick(timestamp) {
         if (this.numOwned < 1) return;
-        
+
         let timeSinceLast = timestamp - this.lastCollected;
         this.fillAmount = (timeSinceLast / this.timeToFill_MS)
         

@@ -7,16 +7,18 @@
                 "id": "1",
                 "cost": 1,
                 "costMult": 1.01,
-                "time": 10,
-                "icon": "lemon.png"
+                "time": 1,
+                "icon": "lemon.png",
+                "funds": 1
             },
             {
                 "name": "Paper Route",
                 "id": "2",
                 "cost": 10,
                 "costMult": 1.01,
-                "time": 30,
-                "icon": "news.png"
+                "time": 3,
+                "icon": "news.png",
+                "funds": 10
             }
         ]
     }

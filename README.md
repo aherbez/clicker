@@ -25,3 +25,5 @@ Current focus:
 2:46: stubbed out player inventory and added cash display. automatically ticking money upwards
 
 3:47: added in ability to purchase businesses, ticking of progress per business, rudimentary animation of progress bars
+
+4:25: added in ability to collect funds from businesses manually, button class, buttons for buy and collect

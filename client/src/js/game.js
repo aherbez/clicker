@@ -1,3 +1,5 @@
+import { BusinessLookup } from './business/business_lookup';
+
 /**
  * ClickerClient: main game class
  */
@@ -6,19 +8,29 @@ const TICK_TIME_MS = 500;
 
 export class ClickerClient {
 
-    constructor(elId) {
-        this.canvasEl = document.getElementById(elId);
+    constructor(stageId) {
+        this.busList = new BusinessLookup();
+
+        this.initTimers();
+        this.initCanvas(stageId);
+
+        this.update();
+    }
+
+    initCanvas(stageId) {
+        this.canvasEl = document.getElementById(stageId);
         this.ctx = this.canvasEl.getContext('2d');
 
         this.bounds = {
             width: this.canvasEl.clientWidth,
             height: this.canvasEl.clientHeight,
         }
+    }
 
+    initTimers() {
         this.lastTime = Date.now();
         this.tickTimer = 0;
 
-        this.update();
     }
 
     /**
@@ -26,6 +38,7 @@ export class ClickerClient {
      * (separate from rendering)
      */
     tick() {
+        // update 
     }
 
     /**

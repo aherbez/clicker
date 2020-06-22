@@ -5,24 +5,24 @@ import { BusinessPanel } from './business_panel';
  * Renders the list of purchaseable businesses
  */
 export class BusinessCatalog extends Entity {
-    constructor(businessLookup) {
+    constructor(gr) {
         super();
 
-        this.busList = businessLookup;
+        this.registry = gr;
+        // this.busList = businessLookup;
         let i=0;
-        this.busList.forEach((bd) => {
+        this.registry.businessLookup.forEach((bd) => {
             this.addBusiness(bd, i);
             i++;
         })
     }
 
     addBusiness(bd, index) {
-        let bPanel = new BusinessPanel(bd);
+        let bPanel = new BusinessPanel(bd, this.registry);
         bPanel.setPos(0, (index * (150 + 10)));
         this.children.push(bPanel);
     }
 
     render(ctx) {
-        // ctx.fillRect(0,0, 100, 100);
     }
 }

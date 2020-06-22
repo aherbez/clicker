@@ -19,3 +19,7 @@ Current focus:
 12:10: Serving starter business data from server (2 entries), moving over to displaying businesses in game
 
 12:57: added rendering / click detection framework, business listing panel
+
+2:02: basic business listing and click detection in, moving on to player inventory management
+
+2:46: stubbed out player inventory and added cash display. automatically ticking money upwards

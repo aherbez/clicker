@@ -9,7 +9,7 @@ export class BusinessPanel extends Entity {
     constructor(bd, gr) {
         super();
         this.data = bd;
-        this.gameRegistry = gr;
+        this.registry = gr;
 
         this.bounds = {
             x: WIDTH,
@@ -44,6 +44,8 @@ export class BusinessPanel extends Entity {
     }
 
     _renderPurchaseOption(ctx) {
+        const canAfford = this.registry.playerInventory.canAffordBusiness(this.data.id);
+
         ctx.save();
         this._drawName(ctx);
         this._drawFirstCost(ctx);
@@ -59,7 +61,6 @@ export class BusinessPanel extends Entity {
     render(ctx) {
         ctx.beginPath();
         ctx.strokeRect(0, 0, WIDTH, HEIGHT);
-
 
         let ownedNum = 0;
         if (ownedNum >= 1) {

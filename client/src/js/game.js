@@ -1,5 +1,9 @@
 import { BusinessLookup } from './business/business_lookup';
 import { BusinessCatalog } from './business/business_catalog';
+import { GameRegistry } from './game_registry';
+import { PlayerInventory } from './player/player_inventory';
+
+import { GameScreen } from './ui/game_screen';
 
 /**
  * ClickerClient: main game class
@@ -10,11 +14,15 @@ const TICK_TIME_MS = 500;
 export class ClickerClient {
 
     constructor(stageId) {
-        let businessCatalog = null;
+        let mainScreen = null;
+        
         this.initTimers();
         this.initCanvas(stageId);
 
-        this.busList = new BusinessLookup(this.initBusinessCatalog.bind(this));
+        this.gameRegistry = new GameRegistry();
+
+        this.businessLookup = new BusinessLookup(this.startGame.bind(this));        
+        this.gameRegistry.businessLookup = this.businessLookup;
 
         this.children = [];
 
@@ -69,12 +77,21 @@ export class ClickerClient {
         this.children.push(this.businessCatalog);
     }
 
+    startGame() {
+        this.playerInventory = new PlayerInventory(this.gameRegistry);
+        this.gameRegistry.playerInventory = this.playerInventory;
+
+        this.mainScreen = new GameScreen(this.gameRegistry);
+        this.children.push(this.mainScreen);
+    }
+
     /**
      * function to handle ticking various update-able objects
      * (separate from rendering)
      */
     tick() {
-        // update 
+        // update
+        this.playerInventory.tick();
     }
 
     /**
@@ -87,8 +104,8 @@ export class ClickerClient {
         ctx.clearRect(0, 0, width, height);
         ctx.save();
 
-        if (this.businessCatalog) {
-            this.businessCatalog._render(ctx);
+        if (this.mainScreen) {
+            this.mainScreen._render(ctx);
         } else {
             ctx.save();
             ctx.translate(width/2, height/2);

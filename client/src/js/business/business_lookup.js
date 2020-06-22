@@ -44,7 +44,7 @@ export class BusinessLookup {
         });
     }
 
-    getBusinessById(id) {
+    getBusinessDataById(id) {
         if (this.listings.has(id)) {
             return this.listings.get(id);
         }

@@ -18,7 +18,12 @@ export class BusinessPanel extends Entity {
     }
 
     onClick(pos) {
-        console.log(`CLICKED ON ${this.data.name} ${JSON.stringify(pos)}`);
+        // only buy on click if it's the first purchase
+        // subsequent purchases require clicking on the "buy" button, specifically
+        const owned = this.registry.playerInventory.numOwned(this.data.id);
+        if (owned < 1) {
+            this.registry.playerInventory.maybePurchaseBusiness(this.data.id);
+        }
     }
 
     _drawName(ctx) {
@@ -33,12 +38,14 @@ export class BusinessPanel extends Entity {
     }
 
     _drawFirstCost(ctx)  {
+        const cost = this.registry.playerInventory.costOfNextBusiness(this.data.id);
+
         ctx.save();
         ctx.translate(WIDTH/2, HEIGHT/2 + 40);
 
         ctx.textAlign = 'center';
         ctx.font = '20px helvetica';
-        ctx.fillText(formatMoney(this.data.cost), 0, 0);
+        ctx.fillText(formatMoney(cost), 0, 0);
 
         ctx.restore();
     }
@@ -55,6 +62,28 @@ export class BusinessPanel extends Entity {
     _renderStatus(ctx) {
         ctx.save();
 
+        const owned = this.registry.playerInventory.numOwned(this.data.id);
+
+        // draw numOwned
+        {
+            let numOwnedStr = `${this.data.name}: ${owned}`;
+            ctx.save();
+            ctx.font = '20px helvetica';
+            ctx.fillText(numOwnedStr, 10, 20);
+            ctx.restore();
+        }
+
+        // render progress bar
+        ctx.save();
+        const fillAmount = this.registry.playerInventory.getProgress(this.data.id);
+        ctx.fillStyle = '#00AA00';
+
+        ctx.fillRect(10, 30, (fillAmount * 100), 30);
+        ctx.strokeRect(10, 30, 100, 30);
+
+        ctx.restore();
+
+
         ctx.restore();
     }
 
@@ -62,8 +91,9 @@ export class BusinessPanel extends Entity {
         ctx.beginPath();
         ctx.strokeRect(0, 0, WIDTH, HEIGHT);
 
-        let ownedNum = 0;
-        if (ownedNum >= 1) {
+        const owned = this.registry.playerInventory.numOwned(this.data.id);
+        
+        if (owned > 0) {
             this._renderStatus(ctx);
         } else {
             this._renderPurchaseOption(ctx);

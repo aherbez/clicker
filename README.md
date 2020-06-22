@@ -23,3 +23,5 @@ Current focus:
 2:02: basic business listing and click detection in, moving on to player inventory management
 
 2:46: stubbed out player inventory and added cash display. automatically ticking money upwards
+
+3:47: added in ability to purchase businesses, ticking of progress per business, rudimentary animation of progress bars

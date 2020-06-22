@@ -1,4 +1,5 @@
 import { BusinessLookup } from './business/business_lookup';
+import { BusinessCatalog } from './business/business_catalog';
 
 /**
  * ClickerClient: main game class
@@ -9,10 +10,13 @@ const TICK_TIME_MS = 500;
 export class ClickerClient {
 
     constructor(stageId) {
-        this.busList = new BusinessLookup();
-
+        let businessCatalog = null;
         this.initTimers();
         this.initCanvas(stageId);
+
+        this.busList = new BusinessLookup(this.initBusinessCatalog.bind(this));
+
+        this.children = [];
 
         this.update();
     }
@@ -33,6 +37,11 @@ export class ClickerClient {
 
     }
 
+    initBusinessCatalog() {
+        this.businessCatalog = new BusinessCatalog(this.busList);
+        this.children.push(this.businessCatalog);
+    }
+
     /**
      * function to handle ticking various update-able objects
      * (separate from rendering)
@@ -45,15 +54,23 @@ export class ClickerClient {
      * render loop
      */
     render(dt) {
-        let c = this.ctx;
+        let ctx = this.ctx;
         let { width, height } = this.bounds;        
 
-        c.clearRect(0, 0, width, height);
+        ctx.clearRect(0, 0, width, height);
+        ctx.save();
 
-        c.save();
-        c.translate(width/2, height/2);
-        c.fillRect(-10, -10, 20, 20);
-        c.restore();
+        if (this.businessCatalog) {
+            this.businessCatalog._render(ctx);
+        } else {
+            ctx.save();
+            ctx.translate(width/2, height/2);
+            ctx.fillText('loading', 0, 0);
+
+            ctx.restore();
+        }
+
+        ctx.restore();
     }
 
     update() {

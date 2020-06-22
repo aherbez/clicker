@@ -1,5 +1,8 @@
-const WIDTH = 600;
-const HEIGHT = 800;
+/**
+ * ClickerClient: main game class
+ */
+
+const TICK_TIME_MS = 500;
 
 export class ClickerClient {
 
@@ -12,22 +15,50 @@ export class ClickerClient {
             height: this.canvasEl.clientHeight,
         }
 
-        this.render();
+        this.lastTime = Date.now();
+        this.tickTimer = 0;
+
+        this.update();
     }
 
-    render() {
+    /**
+     * function to handle ticking various update-able objects
+     * (separate from rendering)
+     */
+    tick() {
+    }
+
+    /**
+     * render loop
+     */
+    render(dt) {
         let c = this.ctx;
         let { width, height } = this.bounds;        
 
         c.clearRect(0, 0, width, height);
 
-
         c.save();
         c.translate(width/2, height/2);
         c.fillRect(-10, -10, 20, 20);
         c.restore();
+    }
 
-        requestAnimationFrame(this.render.bind(this));
+    update() {
+        let curr = Date.now();
+        let deltaTime = curr - this.lastTime;
+        this.lastTime = curr;
+
+        // draw animation as often as possible
+        this.render(deltaTime);
+
+        // only tick if necessary
+        this.tickTimer += deltaTime;
+        if (this.tickTimer > TICK_TIME_MS) {
+            this.tick();
+            this.tickTimer = 0;
+        }
+
+        requestAnimationFrame(this.update.bind(this));
     }
 
 }

@@ -9,6 +9,11 @@ export class Entity {
             x: 0,
             y: 0
         }
+        this.bounds = {
+            x: 0,
+            y: 0
+        }
+
         this.rotation = 0;
         this.children = [];
     }
@@ -17,16 +22,24 @@ export class Entity {
     onClick(pos) {}
     render(ctx) {}
 
-    // derives local click pos and passes event down to children
-    _handleClick(pos) {
-        let localPos = {
-            x: pos.x - this.x,
-            y: pos.y - this.y
-        }
-        this.onClick(localPos);
+    setPos(x, y) {
+        this.pos.x = x;
+        this.pos.y = y;
+    }
 
+    // derives local click pos and passes event down to children
+    handleClickInternal(pos) {
+        let localPos = {
+            x: pos.x - this.pos.x,
+            y: pos.y - this.pos.y
+        }
+
+        if ((localPos.x >= 0 && localPos.x < this.bounds.x) && 
+            (localPos.y > 0 && localPos.y < this.bounds.y)) {
+                this.onClick(localPos);
+        }
         this.children.forEach(c => {
-            c._handleClick(localPos);
+            c.handleClickInternal(localPos);
         })
     }
 

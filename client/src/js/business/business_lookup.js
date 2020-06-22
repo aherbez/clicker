@@ -38,6 +38,12 @@ export class BusinessLookup {
         }
     }
 
+    forEach(f) {
+        this.listings.forEach((bd) => {
+            f(bd);
+        });
+    }
+
     getBusinessById(id) {
         if (this.listings.has(id)) {
             return this.listings.get(id);

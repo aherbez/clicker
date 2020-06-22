@@ -18,6 +18,8 @@ export class ClickerClient {
 
         this.children = [];
 
+        document.onmousedown = this.mouseDown.bind(this);
+
         this.update();
     }
 
@@ -29,6 +31,30 @@ export class ClickerClient {
             width: this.canvasEl.clientWidth,
             height: this.canvasEl.clientHeight,
         }
+
+        this.pos = {
+            x: this.canvasEl.offsetLeft,
+            y: this.canvasEl.offsetTop
+        };
+    }
+
+    mouseDown(evt) {
+        /*
+        console.log(evt);
+        console.log({
+            x: evt.clientX - this.pos.x,
+            y: evt.clientY - this.pos.y
+        });
+        */
+
+        let localPos = {
+            x: evt.clientX - this.pos.x,
+            y: evt.clientY - this.pos.y            
+        }
+        this.children.forEach(c => {
+            c.handleClickInternal(localPos);
+        })
+
     }
 
     initTimers() {
@@ -39,6 +65,7 @@ export class ClickerClient {
 
     initBusinessCatalog() {
         this.businessCatalog = new BusinessCatalog(this.busList);
+        this.businessCatalog.setPos(10, 10);
         this.children.push(this.businessCatalog);
     }
 

@@ -10,6 +10,7 @@ export class BusinessData {
         this.time = data.time || 10;
         this.icon = data.icon || 'null.png';
         this.moneyPerFill = data.funds || 1;
+        this.managerCost = data.managerCost || 100;
     }
 }
 

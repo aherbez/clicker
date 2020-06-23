@@ -1,7 +1,8 @@
 import { BusinessData } from './business_data';
 
 
-const SERVER_URL = 'http://localhost:3000';
+const SERVER_URL_DEV = 'http://localhost:8080';
+const SERVER_URL = 'http://polar-earth-02456.herokuapp.com'
 
 export class BusinessLookup {
     constructor(loadedCallback = null) {

@@ -56,12 +56,14 @@ export class GameScreen extends Entity {
         console.log(`loading data`);
 
         const { playerStorage } = this.registry;
-
         playerStorage.loadPlayerData();
 
     }
 
     resetData() {
         console.log(`resetting data`);
+
+        const { playerInventory } = this.registry;
+        playerInventory.resetData();
     }
 }

@@ -1,6 +1,6 @@
 import { BusinessData, BusinessState } from '../business/business_data';
 
-const STARTING_FUNDS = 100;
+const STARTING_FUNDS = 1;
 
 export class PlayerInventory {
     constructor(registry) {
@@ -52,8 +52,18 @@ export class PlayerInventory {
                 });
             }
         }
-
         this.applyOfflineTicks();
+    }
+
+    resetData() {
+        this.money = STARTING_FUNDS;
+        this.businessStates.forEach(bState => {
+            bState.numOwned = 0;
+            bState.lastStarted = -1;
+            bState.autoStart = false;
+            bState.updateCost();
+        });
+        this.registry.playerStorage.saveData();
     }
 
     // apply funds generated while offline

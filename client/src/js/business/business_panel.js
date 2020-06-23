@@ -109,13 +109,11 @@ export class BusinessPanel extends Entity {
         const owned = playerInventory.numOwned(this.data.id);
 
         // draw numOwned
-        {
-            let numOwnedStr = `${this.data.name}: ${owned}`;
-            ctx.save();
-            ctx.font = '20px helvetica';
-            ctx.fillText(numOwnedStr, 10, 20);
-            ctx.restore();
-        }
+        let numOwnedStr = `${this.data.name}: ${owned}`;
+        ctx.save();
+        ctx.font = '20px helvetica';
+        ctx.fillText(numOwnedStr, 10, 20);
+        ctx.restore();
 
         // render progress bar
         ctx.save();
@@ -126,7 +124,6 @@ export class BusinessPanel extends Entity {
         ctx.strokeRect(10, 30, 100, 30);
 
         ctx.restore();
-
 
         ctx.restore();
     }

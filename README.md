@@ -19,7 +19,7 @@ There are also a number of additional layers on top of the core loop, namely
 
 ### Implementation notes
 
-I chose to go with vanilla ES6-style JS, with no additional libraries. I did borrow heavily from my own simple 2d game engine (Stirling.js) for the basic Entity and UI classes, but all code was written for this challenge specifically.
+I chose to go with vanilla ES6-style JS, with no additional libraries. I did borrow concepts from my own simple 2d game engine (Stirling.js) for the basic Entity and UI classes, but all code was written for this challenge specifically.
 
 
 ## Project Log

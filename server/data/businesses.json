@@ -9,7 +9,8 @@
                 "costMult": 1.01,
                 "time": 1,
                 "icon": "lemon.png",
-                "funds": 1
+                "funds": 1,
+                "managerCost": 20
             },
             {
                 "name": "Paper Route",
@@ -18,7 +19,18 @@
                 "costMult": 1.01,
                 "time": 3,
                 "icon": "news.png",
-                "funds": 10
+                "funds": 10,
+                "managerCost": 100
+            },
+            {
+                "name": "Car Wash",
+                "id": "3",
+                "cost": 20,
+                "costMult": 1.01,
+                "time": 10,
+                "icon": "carwash.png",
+                "funds": 100,
+                "managerCost": 500
             }
         ]
     }

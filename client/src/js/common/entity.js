@@ -17,6 +17,7 @@ export class Entity {
         this.rotation = 0;
         this.children = [];
         this.visible = true;
+        this.enabled = true;
     }
 
     // no-op in base class
@@ -30,6 +31,8 @@ export class Entity {
 
     // derives local click pos and passes event down to children
     handleClickInternal(pos) {
+        if (!this.enabled || !this.visible) return;
+        
         let localPos = {
             x: pos.x - this.pos.x,
             y: pos.y - this.pos.y

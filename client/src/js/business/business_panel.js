@@ -1,6 +1,6 @@
 import { BusinessData } from './business_data';
 import { Entity } from '../common/entity';
-import { formatMoney } from '../common/utils';
+import { formatMoney, drawRoundedRect } from '../common/utils';
 import { Button } from '../ui/button';
 import { BuyButton } from '../ui/button_buy';
 
@@ -31,7 +31,7 @@ export class BusinessPanel extends Entity {
             cost: currCost,
             callback: () => {this.attemptPurchase();}
         });
-        this.buyButton.setPos(120, 70);
+        this.buyButton.setPos(120, 90);
         this.children.push(this.buyButton);
 
         this.startButton = new Button({
@@ -39,7 +39,7 @@ export class BusinessPanel extends Entity {
             width: 100,
             callback: () => {this.startBusiness();}
         });
-        this.startButton.setPos(10,70);
+        this.startButton.setPos(10, 90);
         this.startButton.enabled = true;
         this.children.push(this.startButton);
     }
@@ -112,17 +112,25 @@ export class BusinessPanel extends Entity {
         let numOwnedStr = `${this.data.name}: ${owned}`;
         ctx.save();
         ctx.font = '20px helvetica';
-        ctx.fillText(numOwnedStr, 10, 20);
+        ctx.fillText(numOwnedStr, 20, 30);
         ctx.restore();
 
         // render progress bar
         ctx.save();
         const fillAmount = playerInventory.getProgress(this.data.id);
         ctx.fillStyle = '#00AA00';
-
-        ctx.fillRect(10, 30, (fillAmount * 100), 30);
-        ctx.strokeRect(10, 30, 100, 30);
-
+        ctx.translate(20, 40);
+        const fillWidth = (fillAmount * 200);
+        if (fillWidth >= 10) {
+            drawRoundedRect(ctx, Math.max((fillAmount * 200),10), 40, 5);
+            ctx.fill();
+        }
+        ctx.restore();
+        
+        ctx.save();
+        ctx.translate(20, 40);
+        drawRoundedRect(ctx, 200, 40, 5);
+        ctx.stroke();
         ctx.restore();
 
         ctx.restore();
@@ -146,8 +154,13 @@ export class BusinessPanel extends Entity {
     render(ctx) {
         this.updateButtons();
 
-        ctx.beginPath();
-        ctx.strokeRect(0, 0, WIDTH, HEIGHT);
+        ctx.save();
+        drawRoundedRect(ctx, WIDTH, HEIGHT, 20);
+
+        ctx.lineWidth = 3;
+
+        ctx.stroke();
+        ctx.restore();
 
         const owned = this.registry.playerInventory.numOwned(this.data.id);
         if (owned > 0) {

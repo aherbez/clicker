@@ -200,6 +200,42 @@ export class PlayerInventory {
         }
     }
 
+    playerHasManager(bID) {
+        if (this.businessStates.has(bID)) {
+            return this.businessStates.get(bID).autoStart;
+        }
+        return false;
+    }
+
+    costForManager(bID) {
+        const { businessLookup } = this.registry;
+        const businessData = this.registry.businessLookup.getBusinessDataById(bID);
+
+        if (businessData) {
+            return businessData.managerCost;
+        }
+        return 0;
+    }
+
+    canAffordManager(bID) {
+        const cost = this.costForManager(bID);
+        return this.canAfford(cost);    
+    }
+
+    purchaseManager(bID) {
+        const cost = this.costForManager(bID);
+        if (this.canAfford(cost)) {
+            
+            if (this.businessStates.has(bID)) {
+                this.chargePlayer(cost);
+                this.businessStates.get(bID).autoStart = true;
+                this.businessStates.get(bID).startProgress();
+                this.registry.playerStorage.saveData();    
+            }
+        }
+    }
+
+
     // update state of each business
     tick() {
         const ts = Date.now();

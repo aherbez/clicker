@@ -1,4 +1,14 @@
 import { Entity } from '../common/entity';
+import { drawRoundedRect } from '../common/utils';
+
+export const ButtonDefaultStyle = {
+    radius: 10,
+    fill: '#AFA',
+    disabledColor: '#AAA',
+    strokeColor: '#000',
+    strokeColorDisabled: '#000',
+    border: 3,    
+}
 
 export class Button extends Entity {
     constructor(params) {
@@ -7,10 +17,13 @@ export class Button extends Entity {
         this.bounds.y = params.height || 50;
         this.callback = params.callback || null;
         this.label = params.label || 'foo';
-        this.radius = params.radius || 5;
-        this.backColor = params.fill || '#AFA';
-        this.disabledColor = params.disabledColor || '#AAA';
-        this.strokeColor = params.stroke || '#000';
+
+        this.radius = params.radius || ButtonDefaultStyle.radius;
+        this.backColor = params.fill || ButtonDefaultStyle.fill;
+        this.disabledColor = params.disabledColor || ButtonDefaultStyle.disabledColor;
+        this.strokeColor = params.stroke || ButtonDefaultStyle.strokeColor;
+        this.strokeColorDisabled = params.strokeDisabled || ButtonDefaultStyle.strokeColorDisabled;
+        this.border = params.border || ButtonDefaultStyle.border;
 
         this.enabled = true;
     }
@@ -29,23 +42,18 @@ export class Button extends Entity {
         let w = this.bounds.x;
         let h = this.bounds.y;
 
-        ctx.fillStyle = (this.enabled) ? this.backColor : this.disabledColor;
-        ctx.strokeStyle = this.strokeColor;
+        ctx.save();
 
-        ctx.beginPath();
-        
-        ctx.moveTo(r, 0);
-        ctx.lineTo(w-r, 0);
-        ctx.lineTo(w, r);
-        ctx.lineTo(w, h-r);
-        ctx.lineTo(w-r,h);
-        ctx.lineTo(r,h);
-        ctx.lineTo(0, h-r);
-        ctx.lineTo(0,r);
-        ctx.lineTo(r,0);
+        ctx.fillStyle = (this.enabled) ? this.backColor : this.disabledColor;
+        ctx.strokeStyle = (this.enabled) ? this.strokeColor : this.strokeColorDisabled;
+        ctx.lineWidth = this.border;
+
+        drawRoundedRect(ctx, w, h, r);
 
         ctx.fill();
         ctx.stroke();
+
+        ctx.restore();
     }
 
     render(ctx) {
@@ -54,7 +62,7 @@ export class Button extends Entity {
 
         this.drawButtonBack(ctx);
 
-        ctx.fillStyle = this.strokeColor;
+        ctx.fillStyle = (this.enabled) ? this.strokeColor : this.strokeColorDisabled;
 
         ctx.save();
         ctx.textAlign = 'center';

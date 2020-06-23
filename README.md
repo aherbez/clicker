@@ -37,3 +37,9 @@ Current focus:
 7:12: finished adding in local persistence via localStorage
 
 7:41: added code to apply offline ticks when the player reloads the game, and account for any in-progress ticks
+
+8:34: deployed server to Heroku, changed client to point at deployed version
+
+9:23: was away for a while for dinner, back at it to add ability to buy managers
+
+10:26: Finished adding in UI to purchase managers and auto-start progress

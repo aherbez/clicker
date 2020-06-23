@@ -35,3 +35,5 @@ Current focus:
 6:28: took a bit of a break to see to my son, going with localStorage instead of cookies
 
 7:12: finished adding in local persistence via localStorage
+
+7:41: added code to apply offline ticks when the player reloads the game, and account for any in-progress ticks

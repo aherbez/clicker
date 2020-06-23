@@ -49,7 +49,7 @@ export class GameScreen extends Entity {
         
         const { playerStorage } = this.registry;
         
-        playerStorage.savePlayerData();
+        playerStorage.saveData();
     }
 
     loadData() {

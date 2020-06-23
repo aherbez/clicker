@@ -20,7 +20,7 @@ export class BusinessState {
     constructor() {
         this.id = -1;
         this.numOwned = 0;
-        this.timeToFill = 10;   // time to fill, in seconds
+        this.timeToFill_MS = 10 * 1000;   // time to fill, in milliseconds
         this.moneyPerFill = 10;
         this.costOfNext = 10;
         this.autoStart = false;
@@ -51,9 +51,14 @@ export class BusinessState {
     }
 
     resetTimer() {
-        this.lastStarted = Date.now();
+        // this.lastStarted = Date.now();
         this.fillAmount = 0;
         this.isTicking = this.autoStart;
+        if (this.autoStart) {
+            this.lastStarted = Date.now();
+        } else {
+            this.lastStarted = -1;
+        }
     }
 
     maybeCollect() {
@@ -73,6 +78,7 @@ export class BusinessState {
 
     startProgress() {
         this.resetTimer();
+        this.lastStarted = Date.now();
         this.isTicking = true;
     }
 
@@ -88,5 +94,38 @@ export class BusinessState {
             return this.collectFunds();
         }
         return 0;
+    }
+
+    applyOfflineTicks(now) {
+        console.log(`offline ticks`);
+
+        if (this.lastStarted === -1) return 0;
+
+        let timeSinceLastStartMS = (now - this.lastStarted);
+        let timePerFill = (this.timeToFill_MS * this.timeMultiplier);
+        let ticks = Math.floor(timeSinceLastStartMS / timePerFill);
+            
+        // credit the player with any fractional time
+        let extraMS = timeSinceLastStartMS - (ticks * timePerFill);
+        this.lastStarted = Date.now() - extraMS;
+        this.fillAmount = (now - this.lastStarted) / this.timeToFill_MS;
+
+
+        console.log(`${this.id} ticks: ${ticks} extraMS ${extraMS}`);
+
+        // make sure progress continues if it was previously started
+        // or the player has purchased a manager
+        if (this.autoStart || ticks < 1) {
+            this.isTicking = true;
+        }
+
+        if (!this.autoStart) {
+            // if the player doesn't have a manager, it can only have
+            // completed a single time
+            ticks = Math.min(ticks, 1);
+        }
+
+        return (ticks * this.moneyPerFill * this.numOwned * this.moneyMultiplier);
+
     }
 }

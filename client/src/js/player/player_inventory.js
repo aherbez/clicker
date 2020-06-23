@@ -49,11 +49,24 @@ export class PlayerInventory {
                         bState.lastStarted = lastStart;
                         bState.updateCost();
                     }
-                
                 });
             }
         }
 
+        this.applyOfflineTicks();
+    }
+
+    // apply funds generated while offline
+    applyOfflineTicks() {
+        console.log('APPLYING OFFLINE TICKS');
+        const ts = Date.now();
+
+        let offlineTotal = 0;
+        this.businessStates.forEach(bState => {
+            offlineTotal += bState.applyOfflineTicks(ts);
+        });
+
+        this.addFunds(offlineTotal);
     }
 
     // create a new BusinessState for each business
@@ -172,6 +185,8 @@ export class PlayerInventory {
         if (this.canStart(bID)) {
             const bState = this.businessStates.get(bID);
             bState.startProgress();
+
+            this.registry.playerStorage.maybeSaveData();
         }
     }
 

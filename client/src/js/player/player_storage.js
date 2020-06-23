@@ -11,11 +11,8 @@ const RATE_LIMIT_SEC = 1;
 
 export class PlayerStorage {
     constructor(gr) {
-        this.lastSaved = -1;
-
         this.registry = gr;
-
-        // this.loadPlayerData();
+        this.lastSaved = -1;
     }
 
     loadPlayerData() {

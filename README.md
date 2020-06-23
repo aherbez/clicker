@@ -43,3 +43,5 @@ Current focus:
 9:23: was away for a while for dinner, back at it to add ability to buy managers
 
 10:26: Finished adding in UI to purchase managers and auto-start progress
+
+10:31: Calling it a night, will add some more polish tomorrow

@@ -28,15 +28,15 @@ export class BusinessPanel extends Entity {
         });
         this.buyButton.setPos(120, 70);
         this.children.push(this.buyButton);
-
-        this.collectButton = new Button({
-            label: 'collect',
+        
+        this.startButton = new Button({
+            label: 'start',
             width: 100,
-            callback: () => {this.attemptCollect();}
+            callback: () => {this.startBusiness();}
         });
-        this.collectButton.setPos(10,70);
-        this.collectButton.enabled = false;
-        this.children.push(this.collectButton);
+        this.startButton.setPos(10,70);
+        this.startButton.enabled = true;
+        this.children.push(this.startButton);
     }
 
     onClick(pos) {
@@ -54,6 +54,10 @@ export class BusinessPanel extends Entity {
 
     attemptCollect() {
         this.registry.playerInventory.maybeCollectFunds(this.data.id);
+    }
+
+    startBusiness() {
+        this.registry.playerInventory.maybeStartBusiness(this.data.id);
     }
 
     _drawName(ctx) {
@@ -124,10 +128,12 @@ export class BusinessPanel extends Entity {
 
         const owned = playerInventory.numOwned(this.data.id);
         this.buyButton.visible = (owned > 0);
-        this.collectButton.visible = (owned > 0);    
+        // this.collectButton.visible = (owned > 0);    
+        this.startButton.visible = (owned > 0);
 
         this.buyButton.enabled = playerInventory.canAffordBusiness(this.data.id);
-        this.collectButton.enabled = playerInventory.canCollect(this.data.id);
+        // this.collectButton.enabled = playerInventory.canCollect(this.data.id);
+        this.startButton.enabled = playerInventory.canStart(this.data.id);
     }
 
     render(ctx) {

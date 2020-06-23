@@ -27,3 +27,5 @@ Current focus:
 3:47: added in ability to purchase businesses, ticking of progress per business, rudimentary animation of progress bars
 
 4:25: added in ability to collect funds from businesses manually, button class, buttons for buy and collect
+
+5:10: took a break for a bit, then realized I had the logic off from the spec (was requiring click to collect instead of click to start progress). Fixed that, now moving on to storing progress- will start w/ a cookie

@@ -119,13 +119,29 @@ export class PlayerInventory {
         }
     }
 
+    
+    canStart(bID) {
+        if (this.businessStates.has(bID)) {
+            const bState = this.businessStates.get(bID);
+            return ((bState.numOwned > 0) && (!bState.isTicking));
+        }
+        return false;
+    }
+
+    maybeStartBusiness(bID) {
+        if (this.canStart(bID)) {
+            const bState = this.businessStates.get(bID);
+            bState.startProgress();
+        }
+    }
+
     // update state of each business
     tick() {
         const ts = Date.now();
         this.businessStates.forEach(bState => {
-            bState.tick(ts);
+            const newFunds = bState.tickAndCollectFunds(ts);
+            this.addFunds(newFunds);
         });
 
-        // this.money += (1 + Math.random());
     }
 }

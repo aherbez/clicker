@@ -23,9 +23,10 @@ export class BusinessState {
         this.timeToFill = 10;   // time to fill, in seconds
         this.moneyPerFill = 10;
         this.costOfNext = 10;
-        this.autoCollect = false;
+        this.autoStart = true;
         this.lastCollected = -1;    // timestamp
         this.fillAmount = 0;
+        this.isTicking = false;
     }
 
     setFromBusinessData(bd) {
@@ -55,21 +56,29 @@ export class BusinessState {
         return collected;
     }
 
-    tick(timestamp) {
-        if (this.numOwned < 1) return;
+    collectFunds() {
+        let collected = (this.moneyPerFill * this.numOwned);
+        console.log(`collected ${this.moneyPerFill} from ${this.numOwned} for a total of ${collected}`);
+        return collected;
+    }
+
+    startProgress() {
+        this.resetTimer();
+        this.isTicking = true;
+    }
+
+    tickAndCollectFunds(timestamp) {
+        if (this.numOwned < 1) return 0;
+        if (!this.isTicking) return 0;
 
         let timeSinceLast = timestamp - this.lastCollected;
         this.fillAmount = (timeSinceLast / this.timeToFill_MS)
         
-        let shouldAddFunds = false;
-        if (this.fillAmount > 1) {
-            if (this.autoCollect) {
-                this.resetTimer();
-                shouldAddFunds = true;
-            } else {
-                this.fillAmount = 1;
-            }
+        if (this.fillAmount > 0.99) {
+            this.resetTimer();
+            this.isTicking = this.autoStart;
+            return this.collectFunds();
         }
-        return shouldAddFunds;
+        return 0;
     }
 }

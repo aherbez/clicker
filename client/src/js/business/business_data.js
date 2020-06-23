@@ -24,9 +24,12 @@ export class BusinessState {
         this.moneyPerFill = 10;
         this.costOfNext = 10;
         this.autoStart = false;
-        this.lastCollected = -1;    // timestamp
+        this.lastStarted = -1;    // timestamp
         this.fillAmount = 0;
         this.isTicking = false;
+
+        this.moneyMultiplier = 1;
+        this.timeMultiplier = 1;
     }
 
     setFromBusinessData(bd) {
@@ -34,31 +37,37 @@ export class BusinessState {
         this.timeToFill_MS = bd.time * 1000;
         this.moneyPerFill = bd.moneyPerFill;
         this.costOfNext = bd.baseCost;
+        this.baseCost = bd.baseCost;
+        this.costMult = bd.costMult;
     }
 
-    addAndUpdateCost(numToBuy, baseCost, costMult) {
+    addAndUpdateCost(numToBuy) {
         this.numOwned += numToBuy;
-        this.costOfNext = baseCost * (Math.pow(costMult, this.numOwned));
+        this.updateCost();
+    }
+
+    updateCost() {
+        this.costOfNext = this.baseCost * (Math.pow(this.costMult, this.numOwned));
     }
 
     resetTimer() {
-        this.lastCollected = Date.now();
+        this.lastStarted = Date.now();
         this.fillAmount = 0;
+        this.isTicking = this.autoStart;
     }
 
     maybeCollect() {
         let collected = 0;
         if (this.fillAmount > 0.99) {
             this.resetTimer();
-            collected = (this.moneyPerFill * this.numOwned);
-            console.log(`collected ${this.moneyPerFill} from ${this.numOwned} for a total of ${collected}`);
+            collected = (this.moneyPerFill * this.numOwned * this.moneyMultiplier);
+            // console.log(`collected ${this.moneyPerFill} from ${this.numOwned} for a total of ${collected}`);
         }
         return collected;
     }
 
     collectFunds() {
-        let collected = (this.moneyPerFill * this.numOwned);
-        console.log(`collected ${this.moneyPerFill} from ${this.numOwned} for a total of ${collected}`);
+        let collected = (this.moneyPerFill * this.numOwned * this.moneyMultiplier);
         return collected;
     }
 
@@ -71,12 +80,11 @@ export class BusinessState {
         if (this.numOwned < 1) return 0;
         if (!this.isTicking) return 0;
 
-        let timeSinceLast = timestamp - this.lastCollected;
+        let timeSinceLast = timestamp - this.lastStarted;
         this.fillAmount = (timeSinceLast / this.timeToFill_MS)
         
         if (this.fillAmount > 0.99) {
             this.resetTimer();
-            this.isTicking = this.autoStart;
             return this.collectFunds();
         }
         return 0;

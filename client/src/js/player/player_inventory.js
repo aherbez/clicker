@@ -12,6 +12,51 @@ export class PlayerInventory {
         this.initBusinesses();
     }
 
+    serialize() {
+        let status = {};
+        status.money = this.money;
+        status.businesses = [];
+
+        this.businessStates.forEach(businessState => {
+            let state = {
+                id: businessState.id,
+                num: businessState.numOwned,
+                lastStart: businessState.lastStarted,
+                autoStart: businessState.autoStart
+            };
+            status.businesses.push(state);
+        });
+        return JSON.stringify(status);
+    }
+
+    deserialize(dataJSON) {
+        const data = JSON.parse(dataJSON);
+        console.log(data);
+
+        if (data) {
+            if (data.money) {
+                this.money = data.money;
+            }
+
+            if (data.businesses) {
+                data.businesses.forEach(storedBusinessData => {
+                    const { id, num, lastStart, autoStart } = storedBusinessData;
+                    
+                    if (this.businessStates.has(id)) {
+                        const bState = this.businessStates.get(id);
+                        bState.numOwned = num;
+                        bState.autoStart = autoStart;
+                        bState.lastStarted = lastStart;
+                        bState.updateCost();
+                    }
+                
+                });
+            }
+        }
+
+    }
+
+    // create a new BusinessState for each business
     initBusinesses() {
         this.registry.businessLookup.forEach(businessData => {
             let businessState = new BusinessState();
@@ -71,6 +116,7 @@ export class PlayerInventory {
         const bState = this.businessStates.get(bID);
         bState.addAndUpdateCost(numToBuy, businessData.baseCost, businessData.costMult);
 
+        this.registry.playerStorage.saveData();
         // this.debugPrintInv();
     }
 
@@ -132,10 +178,19 @@ export class PlayerInventory {
     // update state of each business
     tick() {
         const ts = Date.now();
+
+        let totalGain = 0;
+
         this.businessStates.forEach(bState => {
             const newFunds = bState.tickAndCollectFunds(ts);
             this.addFunds(newFunds);
+            totalGain += newFunds;
         });
+
+        // if we gained money, maybe save (rate-limit)
+        if (totalGain > 0) {
+            this.registry.playerStorage.maybeSaveData();
+        }
 
     }
 }

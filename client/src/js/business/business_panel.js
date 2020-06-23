@@ -135,13 +135,15 @@ export class BusinessPanel extends Entity {
         const { playerInventory } = this.registry;
 
         const owned = playerInventory.numOwned(this.data.id);
-        this.buyButton.visible = (owned > 0);
-        // this.collectButton.visible = (owned > 0);    
+        const nextCost = playerInventory.costOfNextBusiness(this.data.id);
+
+        this.buyButton.visible = (owned > 0);    
         this.startButton.visible = (owned > 0);
 
         this.buyButton.enabled = playerInventory.canAffordBusiness(this.data.id);
-        // this.collectButton.enabled = playerInventory.canCollect(this.data.id);
         this.startButton.enabled = playerInventory.canStart(this.data.id);
+
+        this.buyButton.cost = nextCost;
     }
 
     render(ctx) {

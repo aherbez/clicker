@@ -21,12 +21,44 @@ export class GameScreen extends Entity {
         this.cashDisplay.setPos(10, 50);
         this.children.push(this.cashDisplay);
 
+        this.saveDataButton = new Button({
+            label: 'save',
+            callback: () => {this.saveData();}
+        });
+        this.saveDataButton.setPos(300, 10);
+        this.children.push(this.saveDataButton);
+
+        this.loadDataButton = new Button({
+            label: 'load',
+            callback: () => {this.loadData();}
+        });
+        this.loadDataButton.setPos(360, 10);
+        this.children.push(this.loadDataButton);
+
         this.resetButton = new Button({
             label: 'reset',
             callback: () => {this.resetData();}
         });
-        this.resetButton.setPos(300, 500);
+        this.resetButton.setPos(420, 10);
         this.children.push(this.resetButton);
+
+    }
+
+    saveData() {
+        console.log(`saving data`);
+        
+        const { playerStorage } = this.registry;
+        
+        playerStorage.savePlayerData();
+    }
+
+    loadData() {
+        console.log(`loading data`);
+
+        const { playerStorage } = this.registry;
+
+        playerStorage.loadPlayerData();
+
     }
 
     resetData() {

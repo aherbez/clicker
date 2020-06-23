@@ -31,3 +31,7 @@ Current focus:
 5:10: took a break for a bit, then realized I had the logic off from the spec (was requiring click to collect instead of click to start progress). Fixed that, now moving on to storing progress- will start w/ a cookie
 
 5:16: thinking through data persistence (starting w/ a browser cookie)
+
+6:28: took a bit of a break to see to my son, going with localStorage instead of cookies
+
+7:12: finished adding in local persistence via localStorage

@@ -2,6 +2,7 @@ import { BusinessLookup } from './business/business_lookup';
 import { BusinessCatalog } from './business/business_catalog';
 import { GameRegistry } from './game_registry';
 import { PlayerInventory } from './player/player_inventory';
+import { PlayerStorage } from './player/player_storage';
 
 import { GameScreen } from './ui/game_screen';
 
@@ -23,6 +24,9 @@ export class ClickerClient {
 
         this.businessLookup = new BusinessLookup(this.startGame.bind(this));        
         this.gameRegistry.businessLookup = this.businessLookup;
+
+        this.playerStorage = new PlayerStorage(this.gameRegistry);
+        this.gameRegistry.playerStorage = this.playerStorage;
 
         this.children = [];
 
@@ -83,6 +87,8 @@ export class ClickerClient {
 
         this.mainScreen = new GameScreen(this.gameRegistry);
         this.children.push(this.mainScreen);
+
+        this.gameRegistry.playerStorage.loadPlayerData();
     }
 
     /**

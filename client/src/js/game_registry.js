@@ -1,9 +1,12 @@
 export class GameRegistry {
     constructor() {
-        // instance of PlayerInventory
-        this.playerInventory = null;
-        
         // BusinessLookup instance
         this.businessLookup = null;
+
+        // PlayerInventory instance
+        this.playerInventory = null;
+        // PlayerStorage instace
+        this.playerStorage = null;
+        
     }
 }

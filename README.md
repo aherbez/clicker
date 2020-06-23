@@ -29,3 +29,5 @@ Current focus:
 4:25: added in ability to collect funds from businesses manually, button class, buttons for buy and collect
 
 5:10: took a break for a bit, then realized I had the logic off from the spec (was requiring click to collect instead of click to start progress). Fixed that, now moving on to storing progress- will start w/ a cookie
+
+5:16: thinking through data persistence (starting w/ a browser cookie)

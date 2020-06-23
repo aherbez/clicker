@@ -24,7 +24,7 @@ export class Button extends Entity {
         }
     }
 
-    render(ctx) {
+    drawButtonBack(ctx) {
         let r = this.radius;
         let w = this.bounds.x;
         let h = this.bounds.y;
@@ -46,6 +46,13 @@ export class Button extends Entity {
 
         ctx.fill();
         ctx.stroke();
+    }
+
+    render(ctx) {
+        let w = this.bounds.x;
+        let h = this.bounds.y;
+
+        this.drawButtonBack(ctx);
 
         ctx.fillStyle = this.strokeColor;
 

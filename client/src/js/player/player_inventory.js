@@ -70,14 +70,8 @@ export class PlayerInventory {
 
         const bState = this.businessStates.get(bID);
         bState.addAndUpdateCost(numToBuy, businessData.baseCost, businessData.costMult);
-        
-        // if this is the first one we've bought, set last collected to now
-        // (to prevent bars being automatically filled)
-        if (bState.numOwned === 1) {
-            bState.lastCollected = Date.now();
-        }
 
-        this.debugPrintInv();
+        // this.debugPrintInv();
     }
 
     debugPrintInv() {
@@ -88,7 +82,7 @@ export class PlayerInventory {
 
     // purchase managers and other upgrades
     purchaseUpgrade(uID) {
-
+        // TODO: add this in
     }
 
     numOwned(bID) {

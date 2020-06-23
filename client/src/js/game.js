@@ -91,7 +91,6 @@ export class ClickerClient {
      */
     tick() {
         // update
-        this.playerInventory.tick();
     }
 
     /**
@@ -121,6 +120,10 @@ export class ClickerClient {
         let curr = Date.now();
         let deltaTime = curr - this.lastTime;
         this.lastTime = curr;
+
+        if (this.playerInventory) {
+            this.playerInventory.tick();
+        }
 
         // draw animation as often as possible
         this.render(deltaTime);

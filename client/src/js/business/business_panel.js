@@ -2,6 +2,7 @@ import { BusinessData } from './business_data';
 import { Entity } from '../common/entity';
 import { formatMoney } from '../common/utils';
 import { Button } from '../ui/button';
+import { BuyButton } from '../ui/button_buy';
 
 const WIDTH = 380;
 const HEIGHT = 150;
@@ -21,14 +22,18 @@ export class BusinessPanel extends Entity {
     }
 
     setupButtons() {
-        this.buyButton = new Button({
+        const currCost = this.registry.playerInventory.costOfNextBusiness(this.data.id);
+
+        this.buyButton = new BuyButton({
             label: 'buy',
             width: 100,
+            num: 1,
+            cost: currCost,
             callback: () => {this.attemptPurchase();}
         });
         this.buyButton.setPos(120, 70);
         this.children.push(this.buyButton);
-        
+
         this.startButton = new Button({
             label: 'start',
             width: 100,
@@ -50,6 +55,9 @@ export class BusinessPanel extends Entity {
 
     attemptPurchase() {
         this.registry.playerInventory.maybePurchaseBusiness(this.data.id);
+
+        const currCost = this.registry.playerInventory.costOfNextBusiness(this.data.id);
+        this.buyButton.cost = currCost;
     }
 
     attemptCollect() {

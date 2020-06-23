@@ -23,7 +23,7 @@ export class BusinessState {
         this.timeToFill = 10;   // time to fill, in seconds
         this.moneyPerFill = 10;
         this.costOfNext = 10;
-        this.autoStart = true;
+        this.autoStart = false;
         this.lastCollected = -1;    // timestamp
         this.fillAmount = 0;
         this.isTicking = false;

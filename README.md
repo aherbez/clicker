@@ -1,8 +1,30 @@
 # Clicker
 
-PROJECT LOG:
+This is still in progress! More updates to come soon.
 
-## Monday 6/22
+
+### Overview
+
+The challenge was to create an idle clicker style game, similar to Adventure Capitalist. The core game loop consists of:
+
+- buying businesses
+- activating them
+- receiving money when their progress completes, then
+- using the money received in order to buy more businesses
+
+There are also a number of additional layers on top of the core loop, namely
+
+- buying "managers" that will auto-start businesses (rather than the player having to click)
+- purchaseable upgrades to increase yeild, decrease time, decrease price, etc
+
+### Implementation notes
+
+I chose to go with vanilla ES6-style JS, with no additional libraries. I did borrow heavily from my own simple 2d game engine (Stirling.js) for the basic Entity and UI classes, but all code was written for this challenge specifically.
+
+
+## Project Log
+
+### Monday 6/22
 10:32am: Opening doc and reading spec
 
 10:40am: starting planning, setting up project. 
@@ -45,3 +67,7 @@ Current focus:
 10:26: Finished adding in UI to purchase managers and auto-start progress
 
 10:31: Calling it a night, will add some more polish tomorrow
+
+### Tuesday 6/23
+
+11:16am: updating README, will likely not have much time to work on this today 

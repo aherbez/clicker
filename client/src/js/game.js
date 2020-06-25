@@ -101,7 +101,7 @@ export class ClickerClient {
         // put toasts on top of everything else
         this.gameRegistry.toasts = new ToastManager(this.gameRegistry);
         this.gameRegistry.toasts.setPos(0, 0);
-        this.children.push(this.gameRegistry.toasts);
+        this.mainScreen.children.push(this.gameRegistry.toasts);
 
         playerStorage.loadPlayerData();
         achievements.checkAchievements(false);
@@ -132,7 +132,6 @@ export class ClickerClient {
 
         if (this.mainScreen) {
             this.mainScreen._render(ctx);
-            this.gameRegistry.toasts._render(ctx);
         } else {
             ctx.save();
             ctx.translate(width/2, height/2);

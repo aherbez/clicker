@@ -1,7 +1,7 @@
 import { Entity } from '../common/entity';
 import { ToastPanel } from './toast';
 
-const TIME_TO_DISPLAY_SEC = 5;
+const TIME_TO_DISPLAY_SEC = 3;
 
 export class ToastManager extends Entity {
     constructor(gr) {
@@ -38,8 +38,6 @@ export class ToastManager extends Entity {
     }
 
     render(ctx) {
-        console.log(`rendering ${this.children.length} toasts`);
-
         this.updateToasts();
     }
 }

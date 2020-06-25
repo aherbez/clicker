@@ -33,7 +33,6 @@ export class ClickerClient {
         this.gameRegistry.playerStats = new PlayerStats(this.gameRegistry);
         this.gameRegistry.achievements = new AchievementTracker(this.gameRegistry);
         
-
         this.children = [];
 
         document.onmousedown = this.mouseDown.bind(this);
@@ -105,6 +104,7 @@ export class ClickerClient {
 
         playerStorage.loadPlayerData();
         achievements.checkAchievements(false);
+        achievements.notifyPlayer = true;
     }
 
     /**

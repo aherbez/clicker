@@ -22,6 +22,9 @@ export class AchievementTracker {
         this.achievementLookup = new Map();
         this.achievementsLocked = new Set();
         this.achievementsUnlocked = new Set();
+
+        // start this as false, only set to true once everything is loaded
+        this.notifyPlayer = false;
     }
 
     initFromData(achievementJSON) {
@@ -83,16 +86,16 @@ export class AchievementTracker {
     }
 
 
-    checkAchievements(notifyPlayer = true) {
+    checkAchievements() {
         this.achievementLookup.forEach(achievement => {
             let unlocked = this._allCriteriaMet(achievement.id);
 
             if (unlocked && this.achievementsLocked.has(achievement.id)) {
                 this.unlockAchievement(achievement.id);
-                if (notifyPlayer) {
+                if (this.notifyPlayer) {
                     console.log(`Unlocked ${achievement.name}`);
                 
-                    let msg = `Unlocked ${achievement.name}`;
+                    let msg = `Unlocked: ${achievement.name}`;
                     this.registry.toasts.showToast(msg);
                 }
             }

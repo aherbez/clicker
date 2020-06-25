@@ -70,9 +70,9 @@ export class PlayerStats {
                 valueOrValues.forEach(v => {
                     s.add(v);
                 })
-                this.stats.set(statID, s, false);
+                this.stats.set(statID, s);
             } else {
-                this.stats.set(statID, valueOrValues, false);
+                this.stats.set(statID, valueOrValues);
             }
         });
 
@@ -104,18 +104,15 @@ export class PlayerStats {
     registerMoneySpent(num) {
         if (num < 0) return;
         this._incrementStat(Stats.MONEY_SPENT, num);
-
     }
 
     registerMoneyEarned(num) {
         this._incrementStat(Stats.MONEY_EARNED, num);
-
     }
 
     registerManagerBought(bID) {
         this._incrementStat(Stats.MANAGERS_BOUGHT_NUM);
         this._addToStatList(Stats.MANAGERS_BOUGHT_LIST, bID);
-        
     }
 
     registerUpgradeBought(upgradeID) {

@@ -64,15 +64,11 @@ export class GameScreen extends Entity {
     }
 
     saveData() {
-        console.log(`saving data`);
-        
         const { playerStorage } = this.registry;
         playerStorage.saveData();
     }
 
     loadData() {
-        console.log(`loading data`);
-
         const { playerStorage } = this.registry;
         playerStorage.loadPlayerData();
 

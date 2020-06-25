@@ -16,8 +16,8 @@ export class Entity {
 
         this.rotation = 0;
         this.children = [];
-        this.visible = true;
-        this.enabled = true;
+
+        this.show();
     }
 
     // no-op in base class
@@ -27,6 +27,16 @@ export class Entity {
     setPos(x, y) {
         this.pos.x = x;
         this.pos.y = y;
+    }
+
+    show() {
+        this.visible = true;
+        this.enabled = true;
+    }
+
+    hide() {
+        this.visible = false;
+        this.enabled = false;
     }
 
     // derives local click pos and passes event down to children

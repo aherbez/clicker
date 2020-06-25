@@ -29,6 +29,8 @@ export class BusinessState {
         this.fillAmount = 0;
         this.isTicking = false;
 
+        this.didRestart = false;    // flag used for stat tracking
+
         this.moneyMultiplier = 1;
         this.timeMultiplier = 1;
     }
@@ -84,6 +86,7 @@ export class BusinessState {
     }
 
     tickAndCollectFunds(timestamp) {
+        this.didRestart = false;
         if (this.numOwned < 1) return 0;
         if (!this.isTicking) return 0;
 
@@ -92,9 +95,18 @@ export class BusinessState {
         
         if (this.fillAmount > 0.99) {
             this.resetTimer();
+            this.didRestart = this.autoStart;
             return this.collectFunds();
         }
         return 0;
+    }
+
+    moneyPerTick() {
+        return (this.moneyPerFill * this.numOwned * this.moneyMultiplier);
+    }
+
+    ticksToFunds(ticks) {
+        return (ticks * this.moneyPerTick());
     }
 
     applyOfflineTicks(now) {
@@ -126,7 +138,7 @@ export class BusinessState {
             ticks = Math.min(ticks, 1);
         }
 
-        return (ticks * this.moneyPerFill * this.numOwned * this.moneyMultiplier);
-
+        // return (ticks * this.moneyPerFill * this.numOwned * this.moneyMultiplier);
+        return ticks;
     }
 }

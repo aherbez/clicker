@@ -4,6 +4,7 @@ import { MoneyDisplay } from '../ui/money_display';
 import { BusinessCatalog } from '../business/business_catalog';
 import { Button } from '../ui/button';
 import { ManagerScreen } from './manager_screen';
+import { StatsScreen } from './stats_screen';
 
 export class GameScreen extends Entity {
     constructor(gr) {
@@ -54,6 +55,15 @@ export class GameScreen extends Entity {
         this.showManagersButton.setPos(600, 10);
         this.children.push(this.showManagersButton);
 
+        this.showStatsButton = new Button({
+            label: 'stats',
+            callback: () => { this.showStatsPanel(); },
+            width: 100,
+            height: 40,
+        });
+        this.showStatsButton.setPos(490, 10);
+        this.children.push(this.showStatsButton);
+
         this.managerPanel = new ManagerScreen(this.registry);
         this.managerPanel.closeCallback = () => {
             this.businessCatalog.enabled = true;
@@ -61,6 +71,14 @@ export class GameScreen extends Entity {
         this.managerPanel.setPos(20, 20);
         this.children.push(this.managerPanel);
         this.managerPanel.visible = false;
+
+        this.statsPanel = new StatsScreen(this.registry);
+        this.statsPanel.closeCallback = () => {
+            this.businessCatalog.enabled = true;
+        }
+        this.statsPanel.setPos(20, 20);
+        this.children.push(this.statsPanel);
+        this.statsPanel.hide();
     }
 
     saveData() {
@@ -77,12 +95,20 @@ export class GameScreen extends Entity {
     resetData() {
         console.log(`resetting data`);
 
-        const { playerInventory } = this.registry;
+        const { playerInventory, playerStats, playerStorage } = this.registry;
         playerInventory.resetData();
+        playerStats.resetData();
+
+        playerStorage.saveData();
     }
 
     showManagersPanel() {
-        this.managerPanel.visible = true;
+        this.managerPanel.show();
+        this.businessCatalog.enabled = false;
+    }
+
+    showStatsPanel() { 
+        this.statsPanel.show();
         this.businessCatalog.enabled = false;
     }
 }

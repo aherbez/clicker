@@ -79,3 +79,5 @@ Current focus:
 11:37: Was thinking through approach to stats, achievements and upgrades a bit. Added resulting notes to root/notes/stats.md. Starting in on stat tracking
 
 12:35: Done with setting up stats system and adding it to data loading/saving. Starting on achievements
+
+2:00: Finished wiring up stats to various places in the code and added stat display screen. Also refactored ManagerScreen to extend a ModalScreen to make additional screens easier to add

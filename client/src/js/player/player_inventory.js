@@ -63,7 +63,6 @@ export class PlayerInventory {
             bState.autoStart = false;
             bState.updateCost();
         });
-        this.registry.playerStorage.saveData();
     }
 
     // apply funds generated while offline
@@ -71,9 +70,20 @@ export class PlayerInventory {
         console.log('APPLYING OFFLINE TICKS');
         const ts = Date.now();
 
+        const { playerStats } = this.registry;
+
         let offlineTotal = 0;
         this.businessStates.forEach(bState => {
-            offlineTotal += bState.applyOfflineTicks(ts);
+            // offlineTotal += bState.applyOfflineTicks(ts);
+            let ticks = bState.applyOfflineTicks(ts);
+            console.log(`tick: ${ticks} ${bState.ticksToFunds(ticks)}`);
+            offlineTotal += bState.ticksToFunds(ticks);
+            if (ticks > 1) {
+                // ticks is the total number to apply credit for, including
+                // the one last started with the client running, so only
+                // add ticks that happened offline to the manager total
+                playerStats.registerManagerStart(bState.id, (ticks-1));
+            }
         });
 
         this.addFunds(offlineTotal);
@@ -95,11 +105,19 @@ export class PlayerInventory {
     chargePlayer(cost) {
         if (cost < 0) return;
         this.money -= cost;
+
+        const { playerStats, playerStorage } = this.registry;
+        playerStats.registerMoneySpent(cost);
+        playerStorage.maybeSaveData();
     }
 
     addFunds(funds) {
         if (funds < 0) return;
         this.money += funds;
+
+        const { playerStats, playerStorage } = this.registry;
+        playerStats.registerMoneyEarned(funds);
+        playerStorage.maybeSaveData();
     }
 
     canAfford(cost) {
@@ -134,12 +152,15 @@ export class PlayerInventory {
     purchaseBusiness(bID, numToBuy = 1) {
         console.log(`BUYING ONE OF TYPE: ${bID}`);
 
+        const { playerStorage, playerStats } = this.registry;
+
         const businessData = this.registry.businessLookup.getBusinessDataById(bID);
 
         const bState = this.businessStates.get(bID);
         bState.addAndUpdateCost(numToBuy, businessData.baseCost, businessData.costMult);
 
-        this.registry.playerStorage.saveData();
+        playerStats.registerBusinessBought(bID);
+        playerStorage.saveData();
         // this.debugPrintInv();
     }
 
@@ -196,7 +217,10 @@ export class PlayerInventory {
             const bState = this.businessStates.get(bID);
             bState.startProgress();
 
-            this.registry.playerStorage.maybeSaveData();
+            const { playerStats, playerStorage } = this.registry;
+
+            playerStats.registerManualStart(bID);
+            playerStorage.maybeSaveData();
         }
     }
 
@@ -225,12 +249,16 @@ export class PlayerInventory {
     purchaseManager(bID) {
         const cost = this.costForManager(bID);
         if (this.canAfford(cost)) {
-            
             if (this.businessStates.has(bID)) {
+                const { playerStorage, playerStats } = this.registry;
+
                 this.chargePlayer(cost);
                 this.businessStates.get(bID).autoStart = true;
                 this.businessStates.get(bID).startProgress();
-                this.registry.playerStorage.saveData();    
+                
+                playerStats.registerManagerStart(bID, 1);
+                playerStats.registerManagerBought(bID);
+                playerStorage.saveData();
             }
         }
     }
@@ -238,19 +266,26 @@ export class PlayerInventory {
 
     // update state of each business
     tick() {
+        const { playerStorage, playerStats } = this.registry;
+
         const ts = Date.now();
 
         let totalGain = 0;
 
         this.businessStates.forEach(bState => {
             const newFunds = bState.tickAndCollectFunds(ts);
+
+            if (bState.didRestart) {
+                playerStats.registerManagerStart(bState.id, 1);
+            }
+
             this.addFunds(newFunds);
             totalGain += newFunds;
         });
 
         // if we gained money, maybe save (rate-limit)
         if (totalGain > 0) {
-            this.registry.playerStorage.maybeSaveData();
+            playerStorage.maybeSaveData();
         }
 
     }

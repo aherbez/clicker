@@ -7,6 +7,8 @@ export class GameRegistry {
         this.playerInventory = null;
         // PlayerStorage instace
         this.playerStorage = null;
-        
+        // PlayerStats instance
+        this.playerStats = null;
+
     }
 }

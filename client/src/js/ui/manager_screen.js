@@ -1,13 +1,15 @@
 import { Entity } from '../common/entity';
+import { ModalScreen } from './modal_screen';
 import { Button } from '../ui/button';
 import { ManagerPanel } from './manager_panel';
 import { drawRoundedRect } from '../common/utils';
 
-export class ManagerScreen extends Entity {
+export class ManagerScreen extends ModalScreen {
     constructor(gr) {
         super();
         this.registry = gr;
 
+        /*
         this.closeCallback = null;
     
         this.closeBtn = new Button({
@@ -20,10 +22,12 @@ export class ManagerScreen extends Entity {
         });
         this.closeBtn.setPos(650, 10);
         this.children.push(this.closeBtn);
+        */
 
         this.initManagerButtons();
     }
 
+    /*
     onClose() {
         this.visible = false;
         if (this.closeCallback) {
@@ -31,6 +35,7 @@ export class ManagerScreen extends Entity {
             this.closeCallback();
         }
     }
+    */
 
     initManagerButtons() {
         const { businessLookup } = this.registry;

@@ -1,3 +1,5 @@
+import { formatMoney } from '../common/utils';
+
 /**
  * Responsible for tracking player stats
  * 
@@ -12,6 +14,8 @@ export const Stats = {
     MANAGERS_BOUGHT_NUM: 4,
     UPGRADES_BOUGHT_NUM: 5,
     BUSINESS_BOUGHT_TOTAL: 6,
+    MANUAL_STARTS: 7,
+    MANAGER_STARTS: 8,
 
     // keeping list-based stats IDs separate
     MANAGERS_BOUGHT_LIST: 100,
@@ -24,12 +28,6 @@ export class PlayerStats {
         this.registry = gr;
 
         this.stats = new Map();
-
-        this._setStat(Stats.MONEY_EARNED, 100);
-        this._addToStatList(Stats.UPGRADES_BOUGHT_LIST, 3);
-        this._addToStatList(Stats.UPGRADES_BOUGHT_LIST, 23);
-        this._addToStatList(Stats.UPGRADES_BOUGHT_LIST, 3);
-
     }
 
     // serialize stats for saving data
@@ -54,13 +52,13 @@ export class PlayerStats {
                 ]);
             }
         });
+        // console.log(`STATS TO SAVE: ${JSON.stringify(statsData)}`);
         return JSON.stringify(statsData);
     }
 
     deserialize(dataStr) {
-        console.log(`Setting stats from ${dataStr}`);
+        // console.log(`Setting stats from ${dataStr}`);
         const statData = JSON.parse(dataStr);
-        console.log(statData);
 
         statData.forEach(statEntry => {
             let isSet = (statEntry[0] === 1);
@@ -78,7 +76,29 @@ export class PlayerStats {
             }
         });
 
-        console.log('LOADED STATS', this.stats);
+        // console.log('LOADED STATS', this.stats);
+    }
+
+    resetData() {
+        this.stats = new Map();
+    }
+
+    getStatsText() {
+        const statsText = [];
+
+        statsText.push([
+            'Total Money Earned', 
+            formatMoney(this._maybeGetStat(Stats.MONEY_EARNED, 0))]);
+        statsText.push([
+            'Total Money Spent',
+            formatMoney(this._maybeGetStat(Stats.MONEY_SPENT, 0))]);
+        statsText.push(['Buinesses Bought', this._maybeGetStat(Stats.BUSINESS_BOUGHT_TOTAL, 0)]);
+        statsText.push(['Manual Starts', this._maybeGetStat(Stats.MANUAL_STARTS, 0)]);
+        statsText.push(['Managers Hired', this._maybeGetStat(Stats.MANAGERS_BOUGHT_NUM, 0)]);
+        statsText.push(['Manager Starts', this._maybeGetStat(Stats.MANAGER_STARTS, 0)]);
+        statsText.push(['Upgrades Purchased', this._maybeGetStat(Stats.UPGRADES_BOUGHT_NUM, 0)]);
+
+        return statsText;
     }
 
     registerMoneySpent(num) {
@@ -100,6 +120,14 @@ export class PlayerStats {
         this._addToStatList(Stats.UPGRADES_BOUGHT_LIST, upgradeID);
     }
 
+    registerManualStart(bID) {
+        this._incrementStat(Stats.MANUAL_STARTS);
+    }
+
+    registerManagerStart(bID, num = 1) {
+        this._incrementStat(Stats.MANAGER_STARTS, num);
+    }
+
     registerBusinessBought(bID) {
         // just add one to the total businesses (number owned per business is already tracked
         // in player inventory, so let's not duplicate data)
@@ -108,11 +136,14 @@ export class PlayerStats {
 
     // used to replace the current value of a stat
     _setStat(statID, value) {
+        // console.log(`setting stat: ${statID} to ${value}`);
         this.stats.set(statID, value);        
     }
 
     // used for stats that should be additive
     _incrementStat(statID, value = 1) {
+        // console.log(`incrementing stat: ${statID} by ${value}`)
+
         if (this.stats.has(statID)) {
             const newValue = this.stats.get(statID) + value;
             this.stats.set(statID, newValue);
@@ -148,6 +179,13 @@ export class PlayerStats {
         }
         const list = this.stats.get(statID);
         list.add(value);
+    }
+
+    _maybeGetStat(statID, defaultValue) {
+        if (this.stats.has(statID)) {
+            return this.stats.get(statID);
+        }
+        return defaultValue;
     }
 
     // trigger a check of achivements

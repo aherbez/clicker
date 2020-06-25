@@ -4,7 +4,7 @@ import { GameRegistry } from './game_registry';
 import { PlayerInventory } from './player/player_inventory';
 import { PlayerStorage } from './player/player_storage';
 import { PlayerStats } from './upgrades/player_stats';
-
+import { GameData } from './game_data';
 import { GameScreen } from './ui/game_screen';
 
 /**
@@ -23,13 +23,13 @@ export class ClickerClient {
 
         this.gameRegistry = new GameRegistry();
 
-        this.businessLookup = new BusinessLookup(this.startGame.bind(this));        
-        this.gameRegistry.businessLookup = this.businessLookup;
+        this.gameRegistry.gameData = new GameData();
+        this.gameRegistry.gameData.getFromServer(this.startGame.bind(this));
 
-        this.playerStorage = new PlayerStorage(this.gameRegistry);
-        this.gameRegistry.playerStorage = this.playerStorage;
-
+        this.gameRegistry.businessLookup = new BusinessLookup(this.gameRegistry);
+        this.gameRegistry.playerStorage = new PlayerStorage(this.gameRegistry);
         this.gameRegistry.playerStats = new PlayerStats(this.gameRegistry);
+        
 
         this.children = [];
 
@@ -85,8 +85,11 @@ export class ClickerClient {
     }
 
     startGame() {
-        this.playerInventory = new PlayerInventory(this.gameRegistry);
-        this.gameRegistry.playerInventory = this.playerInventory;
+        const { gameData, businessLookup } = this.gameRegistry;
+
+        businessLookup.initFromData(gameData.businessJSON);
+
+        this.gameRegistry.playerInventory =  new PlayerInventory(this.gameRegistry);
 
         this.mainScreen = new GameScreen(this.gameRegistry);
         this.children.push(this.mainScreen);
@@ -131,12 +134,14 @@ export class ClickerClient {
     }
 
     update() {
+        const { playerInventory } = this.gameRegistry;
+
         let curr = Date.now();
         let deltaTime = curr - this.lastTime;
         this.lastTime = curr;
 
-        if (this.playerInventory) {
-            this.playerInventory.tick();
+        if (playerInventory) {
+            playerInventory.tick();
         }
 
         // draw animation as often as possible

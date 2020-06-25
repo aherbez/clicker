@@ -10,5 +10,7 @@ export class GameRegistry {
         // PlayerStats instance
         this.playerStats = null;
 
+        // GameData
+        this.gameData = null;
     }
 }

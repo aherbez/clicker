@@ -5,6 +5,11 @@ const SERVER_URL_DEV = 'http://localhost:8080';
 const SERVER_URL = 'http://polar-earth-02456.herokuapp.com'
 
 export class BusinessLookup {
+    constructor(gr) {
+        this.registry = gr;
+        this.listings = new Map();
+    }
+    /*
     constructor(loadedCallback = null) {
         // fetch list of businesses from server
         
@@ -20,14 +25,15 @@ export class BusinessLookup {
             });
         });
     }
+    */
 
-    initFromData(data) {
-        console.log(`Found data version: ${data.v}, initializing`);
+    initFromData(businessJSON) {
+        // console.log(`Found data version: ${data.v}, initializing`);
 
-        console.log(data.businesses);
+        console.log(businessJSON);
 
-        if (data.businesses) {
-            data.businesses.forEach(business => {
+        if (businessJSON) {
+            businessJSON.forEach(business => {
                 let b = new BusinessData(business);
                 this.listings.set(b.id, b);
                 console.log(`loaded ${b.name}`);

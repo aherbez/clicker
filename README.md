@@ -77,3 +77,5 @@ Current focus:
 11:12am: back at it! Going to start by adding upgrades and achievements. First step: micro-format for tracking stats (used to determine which upgrades are available, as well as getting achievements for near-free)
 
 11:37: Was thinking through approach to stats, achievements and upgrades a bit. Added resulting notes to root/notes/stats.md. Starting in on stat tracking
+
+12:35: Done with setting up stats system and adding it to data loading/saving. Starting on achievements

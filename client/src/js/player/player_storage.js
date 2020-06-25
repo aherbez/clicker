@@ -16,18 +16,25 @@ export class PlayerStorage {
     }
 
     loadPlayerData() {
-        const { playerInventory } = this.registry;
-        const data = this.getKey('inventory');
-        playerInventory.deserialize(data);
+        const { playerInventory, playerStats } = this.registry;
+        
+        const inventoryData = this.getKey('inventory');
+        playerInventory.deserialize(inventoryData);
+
+        const statsData = this.getKey('stats');
+        playerStats.deserialize(statsData);
     }
 
     saveData() {
         console.log(`saving player data`);
 
-        const { playerInventory } = this.registry;
+        const { playerInventory, playerStats } = this.registry;
         
         const playerData = playerInventory.serialize();
         this.setKey('inventory', playerData);
+
+        const statsData = playerStats.serialize();
+        this.setKey('stats', statsData);
 
         this.lastSaved = Date.now();
     }

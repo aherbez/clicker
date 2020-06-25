@@ -3,6 +3,7 @@ import { BusinessCatalog } from './business/business_catalog';
 import { GameRegistry } from './game_registry';
 import { PlayerInventory } from './player/player_inventory';
 import { PlayerStorage } from './player/player_storage';
+import { PlayerStats } from './upgrades/player_stats';
 
 import { GameScreen } from './ui/game_screen';
 
@@ -27,6 +28,8 @@ export class ClickerClient {
 
         this.playerStorage = new PlayerStorage(this.gameRegistry);
         this.gameRegistry.playerStorage = this.playerStorage;
+
+        this.gameRegistry.playerStats = new PlayerStats(this.gameRegistry);
 
         this.children = [];
 
@@ -108,6 +111,11 @@ export class ClickerClient {
 
         ctx.clearRect(0, 0, width, height);
         ctx.save();
+
+        ctx.save();
+        ctx.fillStyle = '#ffcb74';
+        ctx.fillRect(0, 0, this.bounds.width, this.bounds.height);
+        ctx.restore();
 
         if (this.mainScreen) {
             this.mainScreen._render(ctx);

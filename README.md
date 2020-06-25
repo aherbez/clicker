@@ -87,3 +87,5 @@ Current focus:
 3:18: Added achievement tracking and notification (via alert) when a player unlocks a new achievement. Also stubbed out the achievement display panel
 
 3:45: Added in toast to notify the player when they unlock achievements
+
+4:04: Fixed bug with toasts showing on startup. Moving on to upgrades

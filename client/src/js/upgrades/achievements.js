@@ -5,6 +5,7 @@ export class AchievementData {
         this.desc = data.desc || '';
         this.hidden = data.hidden || false;
         this.criteria = data.criteria || [];
+        this.unlocked = false;
     }
 }
 
@@ -47,12 +48,26 @@ export class AchievementTracker {
         if (this.achievementsLocked.has(aID)) {
             this.achievementsUnlocked.add(aID);
             this.achievementsLocked.delete(aID);
+
+            this.achievementLookup.get(aID).unlocked = true;
             return true;
         }
         return false;
     }
 
     getLockedAchievements() {
+        let lockedIDs = Array.from(this.achievementsLocked);
+
+        return lockedIDs.map(id => {
+            console.log(`locked achievement id ${id}`, this.achievementLookup.get(id));
+            return this.achievementLookup.get(id);
+        });
+    }
+
+    getUnlockedAchievements() {
+        let unlockedIDs = Array.from(this.achievementsUnlocked);
+
+        return unlockedIDs.map(id => this.achievementLookup.get(id));  
     }
 
     _checkCriteria(statValue, targetValue, relationship) {

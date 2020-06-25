@@ -89,3 +89,5 @@ Current focus:
 3:45: Added in toast to notify the player when they unlock achievements
 
 4:04: Fixed bug with toasts showing on startup. Moving on to upgrades
+
+4:28: Added in rendering of locked and unlocked achievements to achievement display. Actually moving to upgrades 

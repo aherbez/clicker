@@ -4,6 +4,7 @@ const app = express();
 
 const businessListJSON = require('./data/businesses');
 const achievementListJSON = require('./data/achievements');
+const upgradeJSON = require('./data/upgrades');
 
 app.use(cors());
 
@@ -26,9 +27,10 @@ app.get('/achievements/list', (req, res) => {
 
 app.get('/gamedata', (req, res) => {
     res.json({
-        v: "0.3",
+        v: "0.4",
         businesses: businessListJSON.data.businesses,
-        achievements: achievementListJSON.data.achievements
+        achievements: achievementListJSON.data.achievements,
+        upgrades: upgradeJSON.data.upgrades
     });
 })
 

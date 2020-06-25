@@ -12,5 +12,8 @@ export class GameRegistry {
 
         // GameData
         this.gameData = null;
+
+        // AchievementTracker
+        this.achievements = null;
     }
 }

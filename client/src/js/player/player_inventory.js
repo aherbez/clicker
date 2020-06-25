@@ -67,16 +67,12 @@ export class PlayerInventory {
 
     // apply funds generated while offline
     applyOfflineTicks() {
-        console.log('APPLYING OFFLINE TICKS');
         const ts = Date.now();
-
         const { playerStats } = this.registry;
-
         let offlineTotal = 0;
         this.businessStates.forEach(bState => {
             // offlineTotal += bState.applyOfflineTicks(ts);
             let ticks = bState.applyOfflineTicks(ts);
-            console.log(`tick: ${ticks} ${bState.ticksToFunds(ticks)}`);
             offlineTotal += bState.ticksToFunds(ticks);
             if (ticks > 1) {
                 // ticks is the total number to apply credit for, including

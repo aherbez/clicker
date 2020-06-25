@@ -6,6 +6,7 @@ import { PlayerStorage } from './player/player_storage';
 import { PlayerStats } from './upgrades/player_stats';
 import { GameData } from './game_data';
 import { GameScreen } from './ui/game_screen';
+import { AchievementTracker } from './upgrades/achievements';
 
 /**
  * ClickerClient: main game class
@@ -29,6 +30,7 @@ export class ClickerClient {
         this.gameRegistry.businessLookup = new BusinessLookup(this.gameRegistry);
         this.gameRegistry.playerStorage = new PlayerStorage(this.gameRegistry);
         this.gameRegistry.playerStats = new PlayerStats(this.gameRegistry);
+        this.gameRegistry.achievements = new AchievementTracker(this.gameRegistry);
         
 
         this.children = [];
@@ -85,16 +87,19 @@ export class ClickerClient {
     }
 
     startGame() {
-        const { gameData, businessLookup } = this.gameRegistry;
+        const { gameData, businessLookup, achievements, playerStorage } = this.gameRegistry;
 
         businessLookup.initFromData(gameData.businessJSON);
+        achievements.initFromData(gameData.achievementJSON);
 
         this.gameRegistry.playerInventory =  new PlayerInventory(this.gameRegistry);
 
         this.mainScreen = new GameScreen(this.gameRegistry);
         this.children.push(this.mainScreen);
 
-        this.gameRegistry.playerStorage.loadPlayerData();
+        playerStorage.loadPlayerData();
+
+        achievements.checkAchievements(false);
     }
 
     /**

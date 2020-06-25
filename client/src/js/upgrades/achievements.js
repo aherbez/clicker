@@ -19,8 +19,85 @@ export class AchievementTracker {
     constructor(gr) {
         this.registry = gr;
     
-        this.achievementListLocked = new Set();
-        this.achievementListUnlocked = new Set();
+        this.achievementLookup = new Map();
+        this.achievementsLocked = new Set();
+        this.achievementsUnlocked = new Set();
+    }
+
+    initFromData(achievementJSON) {
+        console.log(achievementJSON);
+
+        achievementJSON.forEach(aData => {
+            let achievement = new AchievementData(aData);
+            this.achievementLookup.set(aData.id, achievement);
+            this.achievementsLocked.add(aData.id);
+        });
+
+        console.log(`Loaded ${this.achievementLookup.size} achivements`);
+    }
+
+    achievementIsUnlocked(aID) {
+        return (this.achievementsUnlocked.has(aID));
+    }
+
+    unlockAchievement(aID) {
+        if (this.achievementsLocked.has(aID)) {
+            this.achievementsUnlocked.add(aID);
+            this.achievementsLocked.delete(aID);
+            return true;
+        }
+        return false;
+    }
+
+    getLockedAchievements() {
+    }
+
+    _checkCriteria(statValue, targetValue, relationship) {
+        console.log(`curr: ${statValue} target ${targetValue} rel: ${relationship}`)
+
+        switch (relationship) {
+            case Rel.GE:
+                return (statValue > targetValue);
+            case Rel.LE:
+                return (statValue < targetValue);
+            case Rel.GE_EQ:
+                return (statValue >= targetValue);
+            case Rel.LE_EQ:
+                return (statValue <= targetValue);
+            default:
+                return false;
+        }
+    }
+
+    _allCriteriaMet(aID) {
+        if (!this.achievementLookup.has(aID)) return false;
+
+        const { playerStats } = this.registry;
+        const achievementData = this.achievementLookup.get(aID);
+        const { criteria } = achievementData;
+        for (let i=0; i < criteria.length; i++ ) {
+            let currentValue = playerStats.maybeGetStat(criteria[i][0]);
+            if (!this._checkCriteria(currentValue, criteria[i][1], criteria[i][2])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    checkAchievements(notifyPlayer = true) {
+        this.achievementLookup.forEach(achievement => {
+            let unlocked = this._allCriteriaMet(achievement.id);
+            // console.log(`Checking: ${achievement.name} ${unlocked}`);
+
+            if (unlocked && this.achievementsLocked.has(achievement.id)) {
+                this.unlockAchievement(achievement.id);
+                if (notifyPlayer) {
+                    alert(`Unlocked ${achievement.name}`);
+                }
+            }
+
+        });
     }
 
 

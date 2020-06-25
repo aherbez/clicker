@@ -5,6 +5,8 @@ import { BusinessCatalog } from '../business/business_catalog';
 import { Button } from '../ui/button';
 import { ManagerScreen } from './manager_screen';
 import { StatsScreen } from './stats_screen';
+import { AchievementPanel } from './achievement_screen';
+
 
 export class GameScreen extends Entity {
     constructor(gr) {
@@ -64,6 +66,15 @@ export class GameScreen extends Entity {
         this.showStatsButton.setPos(490, 10);
         this.children.push(this.showStatsButton);
 
+        this.showAchievementsButton = new Button({
+            label: 'acheivements',
+            callback: () => { this.showAchievementsPanel(); },
+            width: 150,
+            height: 40,
+        });
+        this.showAchievementsButton.setPos(330, 10);
+        this.children.push(this.showAchievementsButton);
+        
         this.managerPanel = new ManagerScreen(this.registry);
         this.managerPanel.closeCallback = () => {
             this.businessCatalog.enabled = true;
@@ -79,6 +90,17 @@ export class GameScreen extends Entity {
         this.statsPanel.setPos(20, 20);
         this.children.push(this.statsPanel);
         this.statsPanel.hide();
+
+        this.achievementsPanel = new AchievementPanel(this.registry);
+        this.achievementsPanel.closeCallback = () => {
+            this.businessCatalog.enabled = true;
+        }
+        this.achievementsPanel.setPos(20, 20);
+        this.children.push(this.achievementsPanel);
+        this.achievementsPanel.hide();
+
+
+
     }
 
     saveData() {
@@ -109,6 +131,11 @@ export class GameScreen extends Entity {
 
     showStatsPanel() { 
         this.statsPanel.show();
+        this.businessCatalog.enabled = false;
+    }
+
+    showAchievementsPanel() {
+        this.achievementsPanel.show();
         this.businessCatalog.enabled = false;
     }
 }

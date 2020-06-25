@@ -70,9 +70,9 @@ export class PlayerStats {
                 valueOrValues.forEach(v => {
                     s.add(v);
                 })
-                this.stats.set(statID, s);
+                this.stats.set(statID, s, false);
             } else {
-                this.stats.set(statID, valueOrValues);
+                this.stats.set(statID, valueOrValues, false);
             }
         });
 
@@ -88,15 +88,15 @@ export class PlayerStats {
 
         statsText.push([
             'Total Money Earned', 
-            formatMoney(this._maybeGetStat(Stats.MONEY_EARNED, 0))]);
+            formatMoney(this.maybeGetStat(Stats.MONEY_EARNED, 0))]);
         statsText.push([
             'Total Money Spent',
-            formatMoney(this._maybeGetStat(Stats.MONEY_SPENT, 0))]);
-        statsText.push(['Buinesses Bought', this._maybeGetStat(Stats.BUSINESS_BOUGHT_TOTAL, 0)]);
-        statsText.push(['Manual Starts', this._maybeGetStat(Stats.MANUAL_STARTS, 0)]);
-        statsText.push(['Managers Hired', this._maybeGetStat(Stats.MANAGERS_BOUGHT_NUM, 0)]);
-        statsText.push(['Manager Starts', this._maybeGetStat(Stats.MANAGER_STARTS, 0)]);
-        statsText.push(['Upgrades Purchased', this._maybeGetStat(Stats.UPGRADES_BOUGHT_NUM, 0)]);
+            formatMoney(this.maybeGetStat(Stats.MONEY_SPENT, 0))]);
+        statsText.push(['Buinesses Bought', this.maybeGetStat(Stats.BUSINESS_BOUGHT_TOTAL, 0)]);
+        statsText.push(['Manual Starts', this.maybeGetStat(Stats.MANUAL_STARTS, 0)]);
+        statsText.push(['Managers Hired', this.maybeGetStat(Stats.MANAGERS_BOUGHT_NUM, 0)]);
+        statsText.push(['Manager Starts', this.maybeGetStat(Stats.MANAGER_STARTS, 0)]);
+        statsText.push(['Upgrades Purchased', this.maybeGetStat(Stats.UPGRADES_BOUGHT_NUM, 0)]);
 
         return statsText;
     }
@@ -104,15 +104,18 @@ export class PlayerStats {
     registerMoneySpent(num) {
         if (num < 0) return;
         this._incrementStat(Stats.MONEY_SPENT, num);
+
     }
 
     registerMoneyEarned(num) {
         this._incrementStat(Stats.MONEY_EARNED, num);
+
     }
 
     registerManagerBought(bID) {
         this._incrementStat(Stats.MANAGERS_BOUGHT_NUM);
         this._addToStatList(Stats.MANAGERS_BOUGHT_LIST, bID);
+        
     }
 
     registerUpgradeBought(upgradeID) {
@@ -135,9 +138,13 @@ export class PlayerStats {
     }
 
     // used to replace the current value of a stat
-    _setStat(statID, value) {
+    _setStat(statID, value, checkAchievements = true) {
         // console.log(`setting stat: ${statID} to ${value}`);
-        this.stats.set(statID, value);        
+        this.stats.set(statID, value);
+
+        if (checkAchievements) {
+            this.registry.achievements.checkAchievements();
+        }
     }
 
     // used for stats that should be additive
@@ -150,6 +157,8 @@ export class PlayerStats {
         } else {
             this._setStat(statID, value);
         }
+
+        this.registry.achievements.checkAchievements();
     }
 
     // track the maximum reached
@@ -160,6 +169,8 @@ export class PlayerStats {
         }
         let newValue = (value > prevValue) ? value : prevValue;
         this.stats.set(statID, newValue);
+
+        this.registry.achievements.checkAchievements();
     }
 
     // track minimum reached (not using this yet, but adding for completeness)
@@ -169,7 +180,9 @@ export class PlayerStats {
             prevValue = this.stats.get(statID);
         }
         let newValue = (value < prevValue) ? value : prevValue;
-        this.stats.set(statID, newValue);        
+        this.stats.set(statID, newValue);
+
+        this.registry.achievements.checkAchievements();
     }
 
     // used to track things like upgrades bought and achievments unlocked
@@ -179,18 +192,15 @@ export class PlayerStats {
         }
         const list = this.stats.get(statID);
         list.add(value);
+
+        this.registry.achievements.checkAchievements();
     }
 
-    _maybeGetStat(statID, defaultValue) {
+    maybeGetStat(statID, defaultValue = null) {
         if (this.stats.has(statID)) {
             return this.stats.get(statID);
         }
         return defaultValue;
-    }
-
-    // trigger a check of achivements
-    _checkAcheivements() {
-
     }
 
 }

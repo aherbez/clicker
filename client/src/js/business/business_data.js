@@ -123,8 +123,7 @@ export class BusinessState {
         this.lastStarted = Date.now() - extraMS;
         this.fillAmount = (now - this.lastStarted) / this.timeToFill_MS;
 
-
-        console.log(`${this.id} ticks: ${ticks} extraMS ${extraMS}`);
+        // console.log(`${this.id} ticks: ${ticks} extraMS ${extraMS}`);
 
         // make sure progress continues if it was previously started
         // or the player has purchased a manager

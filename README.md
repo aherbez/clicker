@@ -83,3 +83,5 @@ Current focus:
 2:00: Finished wiring up stats to various places in the code and added stat display screen. Also refactored ManagerScreen to extend a ModalScreen to make additional screens easier to add
 
 2:37: Added list of achievements to server and refactored game start logic to make a single server call for both businesses and achievements
+
+3:18: Added achievement tracking and notification (via alert) when a player unlocks a new achievement. Also stubbed out the achievement display panel

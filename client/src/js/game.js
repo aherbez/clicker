@@ -7,6 +7,7 @@ import { PlayerStats } from './upgrades/player_stats';
 import { GameData } from './game_data';
 import { GameScreen } from './ui/game_screen';
 import { AchievementTracker } from './upgrades/achievements';
+import { ToastManager } from './ui/toast_manager';
 
 /**
  * ClickerClient: main game class
@@ -97,8 +98,12 @@ export class ClickerClient {
         this.mainScreen = new GameScreen(this.gameRegistry);
         this.children.push(this.mainScreen);
 
-        playerStorage.loadPlayerData();
+        // put toasts on top of everything else
+        this.gameRegistry.toasts = new ToastManager(this.gameRegistry);
+        this.gameRegistry.toasts.setPos(0, 0);
+        this.children.push(this.gameRegistry.toasts);
 
+        playerStorage.loadPlayerData();
         achievements.checkAchievements(false);
     }
 
@@ -127,6 +132,7 @@ export class ClickerClient {
 
         if (this.mainScreen) {
             this.mainScreen._render(ctx);
+            this.gameRegistry.toasts._render(ctx);
         } else {
             ctx.save();
             ctx.translate(width/2, height/2);

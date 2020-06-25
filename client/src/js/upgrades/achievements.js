@@ -53,8 +53,6 @@ export class AchievementTracker {
     }
 
     _checkCriteria(statValue, targetValue, relationship) {
-        console.log(`curr: ${statValue} target ${targetValue} rel: ${relationship}`)
-
         switch (relationship) {
             case Rel.GE:
                 return (statValue > targetValue);
@@ -88,15 +86,16 @@ export class AchievementTracker {
     checkAchievements(notifyPlayer = true) {
         this.achievementLookup.forEach(achievement => {
             let unlocked = this._allCriteriaMet(achievement.id);
-            // console.log(`Checking: ${achievement.name} ${unlocked}`);
 
             if (unlocked && this.achievementsLocked.has(achievement.id)) {
                 this.unlockAchievement(achievement.id);
                 if (notifyPlayer) {
-                    alert(`Unlocked ${achievement.name}`);
+                    console.log(`Unlocked ${achievement.name}`);
+                
+                    let msg = `Unlocked ${achievement.name}`;
+                    this.registry.toasts.showToast(msg);
                 }
             }
-
         });
     }
 

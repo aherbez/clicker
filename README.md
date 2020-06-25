@@ -85,3 +85,5 @@ Current focus:
 2:37: Added list of achievements to server and refactored game start logic to make a single server call for both businesses and achievements
 
 3:18: Added achievement tracking and notification (via alert) when a player unlocks a new achievement. Also stubbed out the achievement display panel
+
+3:45: Added in toast to notify the player when they unlock achievements

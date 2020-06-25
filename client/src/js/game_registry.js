@@ -15,5 +15,8 @@ export class GameRegistry {
 
         // AchievementTracker
         this.achievements = null;
+
+        // ToastManager
+        this.toasts = null;
     }
 }

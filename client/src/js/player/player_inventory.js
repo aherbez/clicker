@@ -59,7 +59,10 @@ export class PlayerInventory {
                 })
             }
         }
+
+        this.recalcBonuses();
         this.applyOfflineTicks();
+
     }
 
     resetData() {
@@ -193,7 +196,7 @@ export class PlayerInventory {
         // don't buy it if we can't afford it
         if (true || this.canAfford(upgradeData.cost)) {
             // don't buy it if we haven't completed the requirements
-            if (achievements.playerHasUnlockedAll(upgradeData.requirements)) {
+            if (true || achievements.playerHasUnlockedAll(upgradeData.requirements)) {
 
                 this.chargePlayer(upgradeData.cost);
                 this.ownedUpgrades.add(upgradeData.id);
@@ -213,10 +216,49 @@ export class PlayerInventory {
         
         // stack all the bonuses from owned upgrades
         const upgradeEffects = new Map();
+        upgradeEffects.set('-1', [1,1,1]);
 
         const ownedList = Array.from(this.ownedUpgrades);
         ownedList.forEach(upgradeID => {
             // stack any effects
+            const upData = upgrades.getById(upgradeID);
+            if (upData) {
+                upData.effects.forEach(effect => {
+                    const businessId = effect[0];
+
+                    // effect types are 1-indexed, since 0 would imply no effect
+                    const effectType = effect[1] - 1;
+                    const effectAmt = effect[2];
+
+                    let newEffect = [1,1,1];
+                    if (upgradeEffects.has(businessId)) {
+                        newEffect = upgradeEffects.get(businessId);
+                    }
+
+                    newEffect[effectType] *= effectAmt;
+
+                    upgradeEffects.set(`${businessId}`, newEffect);
+                })
+            }
+        });
+
+        const effectsForAll = upgradeEffects.get('-1');
+        // now apply to the businesses themselves
+        this.businessStates.forEach(bState => {
+            bState.resetMultipliers();
+            const applicableToThis = upgradeEffects.get(bState.id);
+            console.log(applicableToThis);
+
+            bState.moneyMultiplier *= effectsForAll[0];
+            bState.costMultiplier *= effectsForAll[1];
+            bState.timeMultiplier *= effectsForAll[2];
+
+            if (applicableToThis) {
+                bState.moneyMultiplier *= applicableToThis[0];
+                bState.costMultiplier *= applicableToThis[1];
+                bState.timeMultiplier *= applicableToThis[2];
+            }
+            // console.log(`${bState.id} money: ${bState.moneyMultiplier} cost: ${bState.costMultiplier} speed: ${bState.timeMultiplier}`);
         });
 
     }

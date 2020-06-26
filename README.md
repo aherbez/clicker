@@ -6,7 +6,6 @@ The game is up on my website [here](http://adrianherbez.net/clicker/02/)
 
 Note that it may take some time to load the first time you visit- that's due to the backend running on Heroku's free tier which sometimes takes a couple of seconds to warm up.
 
-
 ### Overview
 
 The challenge was to create an idle clicker style game, similar to Adventure Capitalist. The core game loop consists of:
@@ -186,3 +185,5 @@ Current focus:
 6:58: Fixing achievements so that the "diversify" achivement can work, while not duplicating data on num businesses owned
 
 7:59: Various tweaks here and there to make the colors a little more consistent and various other small changes
+
+9:13: Took a break, then added a lot to the README. Calling it a night

@@ -29,15 +29,18 @@ export class AchievementTracker {
     }
 
     initFromData(achievementJSON) {
-        console.log(achievementJSON);
-
         achievementJSON.forEach(aData => {
             let achievement = new AchievementData(aData);
             this.achievementLookup.set(aData.id, achievement);
             this.achievementsLocked.add(aData.id);
         });
+    }
 
-        console.log(`Loaded ${this.achievementLookup.size} achivements`);
+    getAchievementById(aID) {
+        if (this.achievementLookup.has(aID)) {
+            return this.achievementLookup.get(aID);
+        }
+        return null;
     }
 
     achievementIsUnlocked(aID) {

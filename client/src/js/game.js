@@ -7,6 +7,7 @@ import { PlayerStats } from './upgrades/player_stats';
 import { GameData } from './game_data';
 import { GameScreen } from './ui/game_screen';
 import { AchievementTracker } from './upgrades/achievements';
+import { UpgradesList } from './upgrades/upgrades';
 import { ToastManager } from './ui/toast_manager';
 
 /**
@@ -32,6 +33,7 @@ export class ClickerClient {
         this.gameRegistry.playerStorage = new PlayerStorage(this.gameRegistry);
         this.gameRegistry.playerStats = new PlayerStats(this.gameRegistry);
         this.gameRegistry.achievements = new AchievementTracker(this.gameRegistry);
+        this.gameRegistry.upgrades = new UpgradesList(this.gameRegistry);
         
         this.children = [];
 
@@ -87,10 +89,17 @@ export class ClickerClient {
     }
 
     startGame() {
-        const { gameData, businessLookup, achievements, playerStorage } = this.gameRegistry;
+        const { 
+            gameData,
+            businessLookup,
+            achievements,
+            playerStorage,
+            upgrades
+        } = this.gameRegistry;
 
         businessLookup.initFromData(gameData.businessJSON);
         achievements.initFromData(gameData.achievementJSON);
+        upgrades.initFromData(gameData.upgradesJSON);
 
         this.gameRegistry.playerInventory =  new PlayerInventory(this.gameRegistry);
 

@@ -6,7 +6,7 @@ import { Button } from '../ui/button';
 import { ManagerScreen } from './manager_screen';
 import { StatsScreen } from './stats_screen';
 import { AchievementPanel } from './achievement_screen';
-
+import { UpgradesScreen } from './upgrades_screen';
 
 export class GameScreen extends Entity {
     constructor(gr) {
@@ -54,7 +54,7 @@ export class GameScreen extends Entity {
             width: 150,
             height: 40,
         });
-        this.showManagersButton.setPos(600, 10);
+        this.showManagersButton.setPos(450, 10);
         this.children.push(this.showManagersButton);
 
         this.showStatsButton = new Button({
@@ -63,7 +63,7 @@ export class GameScreen extends Entity {
             width: 100,
             height: 40,
         });
-        this.showStatsButton.setPos(490, 10);
+        this.showStatsButton.setPos(340, 10);
         this.children.push(this.showStatsButton);
 
         this.showAchievementsButton = new Button({
@@ -72,8 +72,17 @@ export class GameScreen extends Entity {
             width: 150,
             height: 40,
         });
-        this.showAchievementsButton.setPos(330, 10);
+        this.showAchievementsButton.setPos(180, 10);
         this.children.push(this.showAchievementsButton);
+        
+        this.showUpgradesButton = new Button({
+            label: 'upgrades',
+            callback: () => { this.showUpgradesPanel(); },
+            width: 140,
+            height: 40,
+        });
+        this.showUpgradesButton.setPos(610, 10);
+        this.children.push(this.showUpgradesButton);
         
         this.managerPanel = new ManagerScreen(this.registry);
         this.managerPanel.closeCallback = () => {
@@ -100,6 +109,13 @@ export class GameScreen extends Entity {
         this.achievementsPanel.hide();
 
 
+        this.upgradesPanel = new UpgradesScreen(this.registry);
+        this.upgradesPanel.closeCallback = () => {
+            this.businessCatalog.enabled = true;
+        };
+        this.upgradesPanel.setPos(20, 20);
+        this.children.push(this.upgradesPanel);
+        this.upgradesPanel.hide();
 
     }
 
@@ -136,6 +152,11 @@ export class GameScreen extends Entity {
 
     showAchievementsPanel() {
         this.achievementsPanel.show();
+        this.businessCatalog.enabled = false;
+    }
+
+    showUpgradesPanel() {
+        this.upgradesPanel.show();
         this.businessCatalog.enabled = false;
     }
 }

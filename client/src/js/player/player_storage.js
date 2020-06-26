@@ -31,7 +31,7 @@ export class PlayerStorage {
     }
 
     saveData() {
-        console.log(`saving player data`);
+        // console.log(`saving player data`);
 
         const { playerInventory, playerStats } = this.registry;
         

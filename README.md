@@ -91,3 +91,7 @@ Current focus:
 4:04: Fixed bug with toasts showing on startup. Moving on to upgrades
 
 4:28: Added in rendering of locked and unlocked achievements to achievement display. Actually moving to upgrades 
+
+4:36: Added in upgrade data to server data
+
+5:31: Displaying upgrades in game w/ a new panel, including display of necessary achievements to unlock them

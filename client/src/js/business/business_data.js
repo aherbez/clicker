@@ -110,8 +110,6 @@ export class BusinessState {
     }
 
     applyOfflineTicks(now) {
-        console.log(`offline ticks`);
-
         if (this.lastStarted === -1) return 0;
 
         let timeSinceLastStartMS = (now - this.lastStarted);

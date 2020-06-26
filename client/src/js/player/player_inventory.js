@@ -31,7 +31,6 @@ export class PlayerInventory {
 
     deserialize(dataJSON) {
         const data = JSON.parse(dataJSON);
-        console.log(data);
 
         if (data) {
             if (data.money) {
@@ -166,9 +165,11 @@ export class PlayerInventory {
         })
     }
 
-    // purchase managers and other upgrades
+    // purchase upgrades
     purchaseUpgrade(uID) {
         // TODO: add this in
+        
+
     }
 
     numOwned(bID) {

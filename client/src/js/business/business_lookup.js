@@ -7,13 +7,10 @@ export class BusinessLookup {
     }
 
     initFromData(businessJSON) {
-        console.log(businessJSON);
-
         if (businessJSON) {
             businessJSON.forEach(business => {
                 let b = new BusinessData(business);
                 this.listings.set(b.id, b);
-                console.log(`loaded ${b.name}`);
             });
         }
 

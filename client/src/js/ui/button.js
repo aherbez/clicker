@@ -32,7 +32,6 @@ export class Button extends Entity {
         if (!this.enabled || !this.visible) return;
 
         if (this.callback) {
-            console.log(`clicked on button`);
             this.callback();
         }
     }

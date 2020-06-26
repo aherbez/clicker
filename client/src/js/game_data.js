@@ -5,6 +5,7 @@ export class GameData {
     constructor() {
         this.businessJSON = null;
         this.achievementJSON = null;
+        this.upgradesJSON = null;
 
         this.loaded = false;
     }
@@ -12,14 +13,11 @@ export class GameData {
     getFromServer(callback) {
         fetch(`${SERVER_URL}/gamedata`).then(res => {
             res.json().then(resJSON => {
-                console.log(resJSON);
-                // l.initFromData(resJSON.data);
+                // console.log(resJSON);
 
                 this.businessJSON = resJSON.businesses;
                 this.achievementJSON = resJSON.achievements;
-
-                console.log(this.businessJSON);
-                console.log(this.achievementJSON);
+                this.upgradesJSON = resJSON.upgrades;
 
                 this.loaded = true;
                 callback();

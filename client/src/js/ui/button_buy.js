@@ -5,14 +5,14 @@ export class BuyButton extends Button {
     constructor(params) {
         super(params);
     
-        this.num = params.num || 1;
+        this.num = params.num || -1;
         this.cost = params.cost || 1;
     }
 
     render(ctx) {
         this.drawButtonBack(ctx);
 
-        const buyStr = `Buy x${this.num}`;
+        const buyStr = (this.num > 0) ? `Buy x${this.num}` : 'Buy';
         const costStr = formatMoney(this.cost);
 
         ctx.save();

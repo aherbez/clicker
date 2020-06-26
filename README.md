@@ -99,3 +99,5 @@ Current focus:
 5:58: Added in ability to purchase upgrades, working on applying their benefits
 
 6:29: Bonuses are being applied appropriately. Going to finish up with a bit to display state of things in the upgrade panel
+
+6:44: Upgrade buttons now reflect the state of things - gray and w/out a buy button if the player can't buy them (either from unmet requirements or lack of funds), blue if the player *can buy them, and blue but w/ the buy button hidden if they've already bought it

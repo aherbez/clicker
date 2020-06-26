@@ -48,8 +48,53 @@ I could have implemented upgrades directly, but that would have resulted in a le
 - logic to allow/disallow upgrades based on achievements
 - various tweaks here and there
 
+I'm pretty happy with the result, given approximately two days and starting from scratch. The major downsides with the current state are, I think that:
 
+1) it definitely could look better than it does
+2) it lacks content (only 5 businesses, not many achievements or upgrades)
+3) it's not at all balanced
 
+For #1- I didn't want to spend too much time on visual polish, since that can eat up a ton of time, and this is essentially a gamejam-type scenario. In a real project, I'd hopefully be working with someone much faster and better than I am when it comes to UI design.
+
+For #2 and #3- both of those are easily addressable given the data-driven nature of the game. All of the game's data lives in the three server-side JSON files and can be easily modified. I generally find that the best approach to implementing content (#2) is to make sure that it's quick and easy to get new content in. Similarly, I generally think that the best way to balance a game is to stand up some version of it that you can poke at, then tweak as needed.
+
+### Microformats
+
+I'm definitely a big fan of data-driven design, so it might make sense to call out some of the microformats built into the game's data.
+
+#### Stats
+
+This is pretty straightforward - just an integer per stat type for simple stats. There are a couple of additional wrinkles though, in that some stats aren't just a single number but rather a list of ids. I ended up not actually using those for any achievements (yet), but it would be easy to do so. 
+
+I also used statIDs of greater than a certain number (200) to indicate the number of businesses owned. The larger number serves as a flag to the stat system to call into the player inventory for the value, thereby avoiding having the same data (number of businesses of each type) stored in two different places.
+
+#### Achievements
+
+Achievements is where it gets a little fun, in that they each have a list of one or more requirements. Each requirement has three components:
+
+- a statID
+- a target value
+- a relationship (greater than, less than, greater than or equal to, or less than or equal to)
+
+A given achievement is only unlocked if *all* of its requirements are met. I didn't end up using anything other than the >= metric, but they could be useful in the future. I did use multiple requirements for the "Diversify" achievement, which requires that the player own one or more of the first three businesses.
+
+#### Upgrades
+
+Upgrades are extremely high-value, so I wanted to make the player have to really work for them. That definitely means setting the price high, but also having there be some fun/challenging/difficult criteria for being able to purchase them, beyond just money. I opted to have there just be a direct mapping of each upgrade to an achievement that is required to purchase it. This is especially fun, given that achievements can be hidden, and only show up once the player has completed them. That, combined with the fact that each upgrade lists the (potentially cryptic) name of the achievement needed to unlock it, and it's a great way to drive player engagement.
+
+But upgrades aren't any good unless they provide a benefit. I settled on having three different types of benefits in the game:
+
+- money multipliers (increase the money generated per collection)
+- cost multiplliers (decrease the cost of additional purchases)
+- speed multiplies (increase the speed of businesses)
+
+...with each of the above being able to be applied on a per-type basis. So, an upgrade has one or more sets of value consisting of
+
+- business ID
+- benefit type (1,2, or 3 for moneyMultiplier, costMultiplier, or speedMultiplier)
+- the actual multiplier value
+
+The business ID can also be set to "-1" to indicate that it should apply to all business types.
 
 ## Project Log
 

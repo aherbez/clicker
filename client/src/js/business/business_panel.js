@@ -124,10 +124,15 @@ export class BusinessPanel extends Entity {
         ctx.fillStyle = '#00AA00';
         ctx.translate(20, 40);
         const fillWidth = (fillAmount * 200);
-        if (fillWidth >= 10) {
-            drawRoundedRect(ctx, Math.max((fillAmount * 200),10), 40, 5);
-            ctx.fill();
+        
+        let radius = Math.min(fillWidth/2, 5);
+        if (fillWidth > 10) {
+            drawRoundedRect(ctx, fillWidth, 40, radius);
+            ctx.fill();    
+        } else {
+            ctx.fillRect(0, 0, fillWidth, 40);
         }
+        
         ctx.restore();
 
         // draw money per tick

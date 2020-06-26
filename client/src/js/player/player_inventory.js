@@ -73,6 +73,7 @@ export class PlayerInventory {
             bState.lastStarted = -1;
             bState.autoStart = false;
             bState.updateCost();
+            bState.resetMultipliers();
         });
     }
 
@@ -184,16 +185,14 @@ export class PlayerInventory {
     // purchase upgrades
     maybePurchaseUpgrade(uID) {
         // TODO: add this in
-        const { upgrades, achievements } = this.registry;
+        const { upgrades, achievements, playerStats } = this.registry;
 
         // don't buy it if we have it
         if (this.ownedUpgrades.has(uID)) {
-            console.log('Already owned!');
             return;
         }
         const upgradeData = upgrades.getById(uID);
         if (upgradeData === null) {
-            console.log('No Upgrade with that ID');
             return;
         }
 
@@ -204,6 +203,8 @@ export class PlayerInventory {
 
                 this.chargePlayer(upgradeData.cost);
                 this.ownedUpgrades.add(upgradeData.id);
+                playerStats.registerUpgradeBought(upgradeData.id);
+
                 this.recalcBonuses();
                 console.log(`BOUGHT UPGRADE: ${upgradeData.name}`);
 

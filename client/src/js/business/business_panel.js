@@ -3,6 +3,7 @@ import { Entity } from '../common/entity';
 import { formatMoney, drawRoundedRect } from '../common/utils';
 import { Button } from '../ui/button';
 import { BuyButton } from '../ui/button_buy';
+import { Colors } from '../ui/styles';
 
 const WIDTH = 380;
 const HEIGHT = 150;
@@ -17,6 +18,8 @@ export class BusinessPanel extends Entity {
             x: WIDTH,
             y: HEIGHT
         }
+
+        this.canAfford = false;
 
         this.setupButtons();
     }
@@ -93,7 +96,7 @@ export class BusinessPanel extends Entity {
     }
 
     _renderPurchaseOption(ctx) {
-        const canAfford = this.registry.playerInventory.canAffordBusiness(this.data.id);
+        // const canAfford = this.registry.playerInventory.canAffordBusiness(this.data.id);
 
         ctx.save();
         this._drawName(ctx);
@@ -126,6 +129,11 @@ export class BusinessPanel extends Entity {
             ctx.fill();
         }
         ctx.restore();
+
+        // draw money per tick
+        ctx.save();
+
+        ctx.restore();
         
         ctx.save();
         ctx.translate(20, 40);
@@ -139,13 +147,15 @@ export class BusinessPanel extends Entity {
     updateButtons() {
         const { playerInventory } = this.registry;
 
+        this.canAfford = playerInventory.canAffordBusiness(this.data.id);
+
         const owned = playerInventory.numOwned(this.data.id);
         const nextCost = playerInventory.costOfNextBusiness(this.data.id);
 
         this.buyButton.visible = (owned > 0);    
         this.startButton.visible = (owned > 0);
 
-        this.buyButton.enabled = playerInventory.canAffordBusiness(this.data.id);
+        this.buyButton.enabled = this.canAfford;
         this.startButton.enabled = playerInventory.canStart(this.data.id);
 
         this.buyButton.cost = nextCost;
@@ -154,15 +164,22 @@ export class BusinessPanel extends Entity {
     render(ctx) {
         this.updateButtons();
 
+        const owned = this.registry.playerInventory.numOwned(this.data.id);
+
         ctx.save();
+
+        ctx.fillStyle = (owned > 0) ? Colors.backColorOff : Colors.backColorOn;
+        ctx.strokeStyle = Colors.borderColorMain;
+        ctx.lineWidth = 5;
+
         drawRoundedRect(ctx, WIDTH, HEIGHT, 20);
 
-        ctx.lineWidth = 3;
-
         ctx.stroke();
+
+        if (this.canAfford || owned > 0) ctx.fill();
         ctx.restore();
 
-        const owned = this.registry.playerInventory.numOwned(this.data.id);
+        
         if (owned > 0) {
             this._renderStatus(ctx);
         } else {

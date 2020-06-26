@@ -50,6 +50,13 @@
                 "desc": "Hire three managers",
                 "criteria": [[4, 3, 3]],
                 "hidden": false
+            },
+            {
+                "id": "8",
+                "name": "Getting caffienated",
+                "desc": "Own five coffee shops",
+                "criteria": [[206, 5, 3]],
+                "hidden": false
             }
         ]
     }

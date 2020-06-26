@@ -11,7 +11,7 @@ export class UpgradeData {
         this.desc = data.desc || '';
         this.requirements = data.requirements || [];
         this.effects = data.effects || [];
-        this.cost = 1; // data.cost || 0;
+        this.cost = data.cost || 0;
     }
 
 }

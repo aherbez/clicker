@@ -19,7 +19,11 @@ export class BusinessCatalog extends Entity {
 
     addBusiness(bd, index) {
         let bPanel = new BusinessPanel(bd, this.registry);
-        bPanel.setPos(0, (index * (150 + 10)));
+
+        let x = index % 2;
+        let y = Math.floor(index/2);
+
+        bPanel.setPos((x * 390), (y * (150 + 10)));
         this.children.push(bPanel);
     }
 

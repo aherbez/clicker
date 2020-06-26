@@ -101,3 +101,7 @@ Current focus:
 6:29: Bonuses are being applied appropriately. Going to finish up with a bit to display state of things in the upgrade panel
 
 6:44: Upgrade buttons now reflect the state of things - gray and w/out a buy button if the player can't buy them (either from unmet requirements or lack of funds), blue if the player *can buy them, and blue but w/ the buy button hidden if they've already bought it
+
+6:58: Fixing achievements so that the "diversify" achivement can work, while not duplicating data on num businesses owned
+
+7:59: Various tweaks here and there to make the colors a little more consistent and various other small changes

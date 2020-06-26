@@ -16,7 +16,12 @@ export class ManagerScreen extends ModalScreen {
         let i=0;
         businessLookup.forEach(bData => {
             let mp = new ManagerPanel(bData, this.registry);
-            mp.setPos(20, 130*i+80);
+
+            let x = (i % 2);
+            let y = Math.floor(i /2);
+
+
+            mp.setPos(20 + (x * 270), 130*y+80);
             this.children.push(mp);
             i++;
         });

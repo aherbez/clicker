@@ -36,6 +36,13 @@ export class AchievementTracker {
         });
     }
 
+    resetData() {
+        this.achievementsUnlocked = new Set();
+        this.achievementsLookup.forEach(aData => {
+            this.achievementsLocked.ad(aData.id);
+        })
+    }
+
     getAchievementById(aID) {
         if (this.achievementLookup.has(aID)) {
             return this.achievementLookup.get(aID);

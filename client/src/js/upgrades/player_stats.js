@@ -21,6 +21,9 @@ export const Stats = {
     MANAGERS_BOUGHT_LIST: 100,
     UPGRADES_BOUGHT_LIST: 101,
     ACHIEVEMENTS_UNLOCKED: 102,
+
+    // offset for tracking num businesses owned
+    OWNED_BUSINESS_OFFSET: 200
 };
 
 export class PlayerStats {
@@ -194,6 +197,15 @@ export class PlayerStats {
     }
 
     maybeGetStat(statID, defaultValue = null) {
+        // special case for getting number of owned businesss from 
+        // player inventory instead of duplicating data here
+        if (statID >= Stats.OWNED_BUSINESS_OFFSET) {
+            statID -= Stats.OWNED_BUSINESS_OFFSET;
+
+            const { playerInventory } = this.registry;
+            return playerInventory.numOwned(''+statID);
+        }
+
         if (this.stats.has(statID)) {
             return this.stats.get(statID);
         }

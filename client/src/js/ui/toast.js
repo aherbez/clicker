@@ -1,5 +1,6 @@
 import { Entity } from '../common/entity';
 import { drawRoundedRect } from '../common/utils';
+import { Colors } from '../ui/styles';
 
 const WIDTH = 300;
 const HEIGHT = 50;
@@ -20,7 +21,7 @@ export class ToastPanel extends Entity {
 
         drawRoundedRect(ctx, WIDTH, HEIGHT, 10);
 
-        ctx.fillStyle = BACK_COLOR;
+        ctx.fillStyle = Colors.backgroundBlue;
         ctx.strokestyle = EDGE_COLOR;
 
         ctx.fill();

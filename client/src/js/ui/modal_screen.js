@@ -1,6 +1,7 @@
 import { Entity } from '../common/entity';
 import { Button } from './button';
 import { drawRoundedRect } from '../common/utils';
+import { Colors } from '../ui/styles';
 
 export class ModalScreen extends Entity {
     constructor() {
@@ -16,7 +17,7 @@ export class ModalScreen extends Entity {
             fill: '#fcc',
             stroke: '#a00',
         });
-        this.closeBtn.setPos(650, 10);
+        this.closeBtn.setPos(710, 10);
         this.children.push(this.closeBtn);
     }
 
@@ -31,8 +32,8 @@ export class ModalScreen extends Entity {
 
     render(ctx) {
         ctx.save();
-        ctx.fillStyle = '#b1b493';
-        drawRoundedRect(ctx, 700, 500, 20);
+        ctx.fillStyle = Colors.backColorOff; // '#b1b493';
+        drawRoundedRect(ctx, 760, 560, 20);
         ctx.fill();
         ctx.stroke();
         ctx.restore();

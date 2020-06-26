@@ -2,6 +2,7 @@ import { Entity } from '../common/entity';
 import { Button } from './button';
 import { BuyButton } from './button_buy';
 import { drawRoundedRect } from '../common/utils';
+import { Colors } from '../ui/styles';
 
 const WIDTH = 260;
 const HEIGHT = 120;
@@ -46,11 +47,16 @@ export class ManagerPanel extends Entity {
         const playerHasManager = playerInventory.playerHasManager(this.businessData.id);
         const playerCanAffordManager = playerInventory.canAffordManager(this.businessData.id);
 
+        
         this.buyButton.enabled = (playerCanAffordManager && !playerHasManager);
-
+       this.buyButton.visible = !playerHasManager;
 
         ctx.save();
-        ctx.fillStyle = '#ffcb74';
+        let currColor = Colors.backColorMain;
+        if (playerCanAffordManager) currColor = Colors.backColorOn;
+        if (playerHasManager) currColor = Colors.backColorOff;
+
+        ctx.fillStyle = currColor;
         drawRoundedRect(ctx, WIDTH, HEIGHT, 10);
         ctx.fill();
         ctx.restore();

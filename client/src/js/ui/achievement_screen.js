@@ -1,7 +1,7 @@
 import { ModalScreen } from './modal_screen';
 import { drawRoundedRect } from '../common/utils';
 
-const WIDTH = 500;
+const WIDTH = 330;
 const HEIGHT = 40;
 
 export class AchievementPanel extends ModalScreen {
@@ -27,28 +27,43 @@ export class AchievementPanel extends ModalScreen {
         let msg = `${aData.name}: ${(locked ? 'LOCKED' : 'UNLOCKED')}`;
         ctx.fillText(msg, 20, 17);
         ctx.font = '12px Helvetica';
-        ctx.fillText(aData.desc, 20, 27);
+        ctx.fillText(aData.desc, 20, 35);
         ctx.restore()
 
         ctx.restore();
-
-        ctx.translate(0, 45);
     }
 
     renderAchievements(ctx) {
         const { achievements } = this.registry; 
-        
-        console.log(achievements.getLockedAchievements());
+
+        let i = 0;
+        let x = 0;
+        let y = 0;
 
         ctx.save();
         ctx.translate(20, 80);
 
+        
         achievements.getUnlockedAchievements().forEach(aData => {
+            ctx.save();
+            x = (i % 2);
+            y = Math.floor(i /2);
+            ctx.translate((x * 340), (y * 50));
             this.renderAchievement(ctx, aData, false);
+            i++;
+            ctx.restore();
         });
 
         achievements.getLockedAchievements().forEach(aData => {
-            this.renderAchievement(ctx, aData, true);
+            if (!aData.hidden) {
+                ctx.save();
+                x = (i % 2);
+                y = Math.floor(i /2);
+                ctx.translate((x * 340), (y * 50));
+                this.renderAchievement(ctx, aData, true);
+                ctx.restore();
+                i++;
+            }
         });
 
         ctx.restore();

@@ -17,7 +17,7 @@ export class ToastManager extends Entity {
         console.log(`showing toast: ${msg}`);
 
         let t = new ToastPanel(msg);
-        t.setPos(490, 540);
+        t.setPos(490, 10);
 
         this.toasts.push(t);
         this.children.push(t);

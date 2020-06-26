@@ -13,8 +13,6 @@ export class GameData {
     getFromServer(callback) {
         fetch(`${SERVER_URL}/gamedata`).then(res => {
             res.json().then(resJSON => {
-                // console.log(resJSON);
-
                 this.businessJSON = resJSON.businesses;
                 this.achievementJSON = resJSON.achievements;
                 this.upgradesJSON = resJSON.upgrades;

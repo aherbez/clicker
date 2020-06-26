@@ -34,7 +34,7 @@
             },
             {
                 "name": "Comic Book Store",
-                "id": "4",
+                "id": "5",
                 "cost": 50,
                 "costMult": 1.05,
                 "time": 30,
@@ -43,14 +43,24 @@
                 "managerCost": 700
             },
             {
-                "name": "Music Venue",
-                "id": "5",
-                "cost": 100,
-                "costMult": 1.25,
-                "time": 60,
-                "icon": "music.png",
+                "name": "Coffee Shop",
+                "id": "6",
+                "cost": 50,
+                "costMult": 1.05,
+                "time": 50,
+                "icon": "coffee.png",
                 "funds": 300,
                 "managerCost": 1000
+            },
+            {
+                "name": "Music Venue",
+                "id": "7",
+                "cost": 700,
+                "costMult": 1.25,
+                "time": 120,
+                "icon": "music.png",
+                "funds": 500,
+                "managerCost": 2000
             }
         ]
     }

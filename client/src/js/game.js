@@ -9,6 +9,7 @@ import { GameScreen } from './ui/game_screen';
 import { AchievementTracker } from './upgrades/achievements';
 import { UpgradesList } from './upgrades/upgrades';
 import { ToastManager } from './ui/toast_manager';
+import { Colors } from './ui/styles';
 
 /**
  * ClickerClient: main game class
@@ -135,7 +136,7 @@ export class ClickerClient {
         ctx.save();
 
         ctx.save();
-        ctx.fillStyle = '#ffcb74';
+        ctx.fillStyle = Colors.backColorMain; // '#ffcb74';
         ctx.fillRect(0, 0, this.bounds.width, this.bounds.height);
         ctx.restore();
 

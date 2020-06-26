@@ -1,5 +1,10 @@
 # Clicker
 
+## Play it here!
+
+The game is up on my website [here](http://adrianherbez.net/clicker/02/)
+
+
 ### Overview
 
 The challenge was to create an idle clicker style game, similar to Adventure Capitalist. The core game loop consists of:

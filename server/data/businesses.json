@@ -31,6 +31,26 @@
                 "icon": "carwash.png",
                 "funds": 100,
                 "managerCost": 500
+            },
+            {
+                "name": "Comic Book Store",
+                "id": "4",
+                "cost": 50,
+                "costMult": 1.05,
+                "time": 30,
+                "icon": "comics.png",
+                "funds": 150,
+                "managerCost": 700
+            },
+            {
+                "name": "Music Venue",
+                "id": "5",
+                "cost": 100,
+                "costMult": 1.25,
+                "time": 60,
+                "icon": "music.png",
+                "funds": 300,
+                "managerCost": 1000
             }
         ]
     }

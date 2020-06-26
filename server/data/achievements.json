@@ -36,6 +36,20 @@
                 "desc": "Own one of each starting business",
                 "criteria": [[201, 1, 3], [202, 1, 3], [203, 1, 3]],
                 "hidden": true
+            },
+            {
+                "id": "6",
+                "name": "Big Spender",
+                "desc": "Spend $1,000.00",
+                "criteria": [[2, 1000, 3]],
+                "hidden": false
+            },
+            {
+                "id": "7",
+                "name": "Full Crew",
+                "desc": "Hire three managers",
+                "criteria": [[4, 3, 3]],
+                "hidden": false
             }
         ]
     }

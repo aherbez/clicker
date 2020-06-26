@@ -4,6 +4,8 @@
 
 The game is up on my website [here](http://adrianherbez.net/clicker/02/)
 
+Note that it may take some time to load the first time you visit- that's due to the backend running on Heroku's free tier which sometimes takes a couple of seconds to warm up.
+
 
 ### Overview
 

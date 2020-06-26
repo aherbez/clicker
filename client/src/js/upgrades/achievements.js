@@ -47,6 +47,15 @@ export class AchievementTracker {
         return (this.achievementsUnlocked.has(aID));
     }
 
+    playerHasUnlockedAll(idArray) {
+        for (let i=0; i < idArray.length; i++) {
+            if (!this.achievementIsUnlocked(idArray[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     unlockAchievement(aID) {
         if (this.achievementsLocked.has(aID)) {
             this.achievementsUnlocked.add(aID);
@@ -62,14 +71,12 @@ export class AchievementTracker {
         let lockedIDs = Array.from(this.achievementsLocked);
 
         return lockedIDs.map(id => {
-            console.log(`locked achievement id ${id}`, this.achievementLookup.get(id));
             return this.achievementLookup.get(id);
         });
     }
 
     getUnlockedAchievements() {
         let unlockedIDs = Array.from(this.achievementsUnlocked);
-
         return unlockedIDs.map(id => this.achievementLookup.get(id));  
     }
 

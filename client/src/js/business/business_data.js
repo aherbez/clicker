@@ -31,8 +31,16 @@ export class BusinessState {
 
         this.didRestart = false;    // flag used for stat tracking
 
+        // used to apply upgrades
         this.moneyMultiplier = 1;
         this.timeMultiplier = 1;
+        this.costMultiplier = 1;
+    }
+
+    resetMultipliers() {
+        this.moneyMultiplier = 1;
+        this.timeMultiplier = 1;
+        this.costMultiplier = 1;
     }
 
     setFromBusinessData(bd) {
@@ -50,7 +58,7 @@ export class BusinessState {
     }
 
     updateCost() {
-        this.costOfNext = this.baseCost * (Math.pow(this.costMult, this.numOwned));
+        this.costOfNext = (this.baseCost * (Math.pow(this.costMult, this.numOwned))) * this.costMultiplier;
     }
 
     resetTimer() {
@@ -69,7 +77,6 @@ export class BusinessState {
         if (this.fillAmount > 0.99) {
             this.resetTimer();
             collected = (this.moneyPerFill * this.numOwned * this.moneyMultiplier);
-            // console.log(`collected ${this.moneyPerFill} from ${this.numOwned} for a total of ${collected}`);
         }
         return collected;
     }
@@ -85,13 +92,17 @@ export class BusinessState {
         this.isTicking = true;
     }
 
+    timeToFill() {
+        return Math.max(1, (this.timeToFill_MS * this.timeMultiplier));
+    }
+
     tickAndCollectFunds(timestamp) {
         this.didRestart = false;
         if (this.numOwned < 1) return 0;
         if (!this.isTicking) return 0;
 
         let timeSinceLast = timestamp - this.lastStarted;
-        this.fillAmount = (timeSinceLast / this.timeToFill_MS)
+        this.fillAmount = (timeSinceLast / this.timeToFill())
         
         if (this.fillAmount > 0.99) {
             this.resetTimer();
@@ -119,7 +130,7 @@ export class BusinessState {
         // credit the player with any fractional time
         let extraMS = timeSinceLastStartMS - (ticks * timePerFill);
         this.lastStarted = Date.now() - extraMS;
-        this.fillAmount = (now - this.lastStarted) / this.timeToFill_MS;
+        this.fillAmount = (now - this.lastStarted) / timePerFill;
 
         // console.log(`${this.id} ticks: ${ticks} extraMS ${extraMS}`);
 

@@ -95,3 +95,5 @@ Current focus:
 4:36: Added in upgrade data to server data
 
 5:31: Displaying upgrades in game w/ a new panel, including display of necessary achievements to unlock them
+
+5:58: Added in ability to purchase upgrades, working on applying their benefits

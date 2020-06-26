@@ -8,6 +8,7 @@ export class PlayerInventory {
 
         this.money = STARTING_FUNDS;
         this.businessStates = new Map();
+        this.ownedUpgrades = new Set();
 
         this.initBusinesses();
     }
@@ -15,6 +16,7 @@ export class PlayerInventory {
     serialize() {
         let status = {};
         status.money = this.money;
+        status.upgrades = Array.from(this.ownedUpgrades);
         status.businesses = [];
 
         this.businessStates.forEach(businessState => {
@@ -50,12 +52,19 @@ export class PlayerInventory {
                     }
                 });
             }
+
+            if (data.upgrades) {
+                data.upgrades.forEach(upID => {
+                    this.ownedUpgrades.add(upID);
+                })
+            }
         }
         this.applyOfflineTicks();
     }
 
     resetData() {
         this.money = STARTING_FUNDS;
+        this.ownedUpgrades = new Set();
         this.businessStates.forEach(bState => {
             bState.numOwned = 0;
             bState.lastStarted = -1;
@@ -166,9 +175,49 @@ export class PlayerInventory {
     }
 
     // purchase upgrades
-    purchaseUpgrade(uID) {
+    maybePurchaseUpgrade(uID) {
         // TODO: add this in
+        const { upgrades, achievements } = this.registry;
+
+        // don't buy it if we have it
+        if (this.ownedUpgrades.has(uID)) {
+            console.log('Already owned!');
+            return;
+        }
+        const upgradeData = upgrades.getById(uID);
+        if (upgradeData === null) {
+            console.log('No Upgrade with that ID');
+            return;
+        }
+
+        // don't buy it if we can't afford it
+        if (true || this.canAfford(upgradeData.cost)) {
+            // don't buy it if we haven't completed the requirements
+            if (achievements.playerHasUnlockedAll(upgradeData.requirements)) {
+
+                this.chargePlayer(upgradeData.cost);
+                this.ownedUpgrades.add(upgradeData.id);
+                this.recalcBonuses();
+                console.log(`BOUGHT UPGRADE: ${upgradeData.name}`);
+
+            } else {
+                console.log('UNMET REQUIREMENTS');
+            }
+        } else {
+            console.log(`Can't afford!`);
+        }
+    }
+
+    recalcBonuses() {
+        const { upgrades } = this.registry;
         
+        // stack all the bonuses from owned upgrades
+        const upgradeEffects = new Map();
+
+        const ownedList = Array.from(this.ownedUpgrades);
+        ownedList.forEach(upgradeID => {
+            // stack any effects
+        });
 
     }
 

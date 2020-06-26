@@ -46,6 +46,8 @@ export class UpgradeButton extends Entity {
         const { playerInventory } = this.registry;
 
         console.log(`Buying upgrade: ${this.upData.name}`);
+
+        playerInventory.maybePurchaseUpgrade(this.upData.id);
         // 
     }
 

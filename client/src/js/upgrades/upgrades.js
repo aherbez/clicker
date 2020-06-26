@@ -11,7 +11,7 @@ export class UpgradeData {
         this.desc = data.desc || '';
         this.requirements = data.requirements || [];
         this.effects = data.effects || [];
-        this.cost = data.cost || 0;
+        this.cost = 1; // data.cost || 0;
     }
 
 }
@@ -35,6 +35,13 @@ export class UpgradesList {
         console.log(`Loaded ${this.upgradeLookup.size} upgrades`);
     }
     
+    getById(upID) {
+        if (this.upgradeLookup.has(upID)) {
+            return this.upgradeLookup.get(upID);
+        }
+        return null;
+    }
+
     getAll() {
         return Array.from(this.upgradeLookup.values());
     }

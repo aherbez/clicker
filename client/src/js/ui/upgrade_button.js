@@ -12,6 +12,7 @@ export class UpgradeButton extends Entity {
         this.upData = upData;
         this.requirementStr = '';
         
+        this.requirementsMet = false;
         this.canAfford = false;
         this.purchased = false;
 
@@ -44,16 +45,43 @@ export class UpgradeButton extends Entity {
 
     buyUpgrade() {
         const { playerInventory } = this.registry;
-
-        console.log(`Buying upgrade: ${this.upData.name}`);
-
         playerInventory.maybePurchaseUpgrade(this.upData.id);
-        // 
+    }
+
+    updateState() {
+        const { achievements, playerInventory } = this.registry;
+
+        // if it's already been bought, don't check anything
+        if (this.purchased) return;
+
+        // check to see if the player owns it
+        this.purchased = playerInventory.playerOwnsUpgrade(this.upData.id);
+
+        // see if requirements have been met
+        if (!this.requirementsMet) {
+            this.requirementsMet = achievements.playerHasUnlockedAll(this.upData.requirements)
+        }
+        this.canAfford = playerInventory.canAfford(this.upData.cost);
     }
 
     render(ctx) {
+        // TODO: this really shouldn't be checked each frame
+        this.updateState();
+
+        if (this.purchased || !this.requirementsMet) {
+            this.buyButton.hide();
+        } else {
+            this.buyButton.show();
+
+            if (this.canAfford) {
+                this.buyButton.enabled = true;
+            } else {
+                this.buyButton.enabled = false;
+            }
+        }
+
         ctx.save();
-        ctx.fillStyle = '#aaf';
+        ctx.fillStyle = (this.requirementsMet) ? '#aaf' : '#aaa';
         ctx.strokeStyle = '#000';
 
         drawRoundedRect(ctx, WIDTH, HEIGHT, 10);

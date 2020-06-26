@@ -177,6 +177,10 @@ export class PlayerInventory {
         })
     }
 
+    playerOwnsUpgrade(uID) {
+        return this.ownedUpgrades.has(uID);
+    }
+
     // purchase upgrades
     maybePurchaseUpgrade(uID) {
         // TODO: add this in
@@ -194,9 +198,9 @@ export class PlayerInventory {
         }
 
         // don't buy it if we can't afford it
-        if (true || this.canAfford(upgradeData.cost)) {
+        if (this.canAfford(upgradeData.cost)) {
             // don't buy it if we haven't completed the requirements
-            if (true || achievements.playerHasUnlockedAll(upgradeData.requirements)) {
+            if (achievements.playerHasUnlockedAll(upgradeData.requirements)) {
 
                 this.chargePlayer(upgradeData.cost);
                 this.ownedUpgrades.add(upgradeData.id);
@@ -211,10 +215,12 @@ export class PlayerInventory {
         }
     }
 
+
+    // TODO: this could use a refactor
     recalcBonuses() {
         const { upgrades } = this.registry;
         
-        // stack all the bonuses from owned upgrades
+        // first step: stack all the bonuses from owned upgrades
         const upgradeEffects = new Map();
         upgradeEffects.set('-1', [1,1,1]);
 
@@ -242,6 +248,7 @@ export class PlayerInventory {
             }
         });
 
+        // second step: run through all the businesses and apply the effects (possibly stacked)
         const effectsForAll = upgradeEffects.get('-1');
         // now apply to the businesses themselves
         this.businessStates.forEach(bState => {

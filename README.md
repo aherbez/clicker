@@ -1,8 +1,5 @@
 # Clicker
 
-This is still in progress! More updates to come soon.
-
-
 ### Overview
 
 The challenge was to create an idle clicker style game, similar to Adventure Capitalist. The core game loop consists of:
@@ -15,11 +12,43 @@ The challenge was to create an idle clicker style game, similar to Adventure Cap
 There are also a number of additional layers on top of the core loop, namely
 
 - buying "managers" that will auto-start businesses (rather than the player having to click)
-- purchaseable upgrades to increase yeild, decrease time, decrease price, etc
+- purchaseable upgrades to increase yield, decrease time, decrease price, etc
+- achievements and stats
 
 ### Implementation notes
 
 I chose to go with vanilla ES6-style JS, with no additional libraries. I did borrow concepts from my own simple 2d game engine (Stirling.js) for the basic Entity and UI classes, but all code was written for this challenge specifically.
+
+I chose to focus on extensibility, and ensuring that all of the data that makes up the game is easily updatable from pure data. I started by setting up a rudimenatary backend and adding some JSON to server the data for the available businesses. While the server doesn't do anything but server JSON, it would be easy to add in more functionality later.
+
+There's a ton of detail in the commit messages and the following log, but the big strokes of development were:
+
+- set up a project with a canvas, basic game loop, and webpack to bundle it all
+- set up a server and have it provide business data
+- render the business data to the player
+- allow for purchasing of businesses
+- allow for gathering of funds from businesses
+- allow for the hiring of managers to make businesses auto-start
+- persisting data in between page loads via localStorage
+
+I got all of the above done on Monday, then was busy with some other obligations on Tuesday and Wednesday. I picked it back up on Thursday.
+
+The largest remaining task to flesh out the game was purchaseable upgrades, but I wanted to make sure that the game had the maximum amount of data-driven extensibility, so I elected to build that third. Instead, I started with code to track stats, which in turn allowed for achievements, and then achievements could unlock purchases. That might seem roundabout, but these kinds of games rely on having many little rewards for the player.
+
+I could have implemented upgrades directly, but that would have resulted in a less engaging game. It also would have likely been harder to update and more brittle- having a microformat for the upgrades necessitated having some structure, so it just made sense to take that a little farther and expose that structure as an achievement system. So, the general approach on Thursday was to
+
+- think through stats, achievements, and upgrades a bit
+- add stat tracking to the game
+- add display of stats in the game
+- add a list of achievements to the server data
+- start tracking achievements
+- side quest: add a toast system
+- add a list of upgrades to the server data
+- display upgrades in game
+- logic to allow/disallow upgrades based on achievements
+- various tweaks here and there
+
+
 
 
 ## Project Log

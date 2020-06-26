@@ -59,14 +59,6 @@ export class ClickerClient {
     }
 
     mouseDown(evt) {
-        /*
-        console.log(evt);
-        console.log({
-            x: evt.clientX - this.pos.x,
-            y: evt.clientY - this.pos.y
-        });
-        */
-
         let localPos = {
             x: evt.clientX - this.pos.x,
             y: evt.clientY - this.pos.y            

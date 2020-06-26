@@ -97,3 +97,5 @@ Current focus:
 5:31: Displaying upgrades in game w/ a new panel, including display of necessary achievements to unlock them
 
 5:58: Added in ability to purchase upgrades, working on applying their benefits
+
+6:29: Bonuses are being applied appropriately. Going to finish up with a bit to display state of things in the upgrade panel

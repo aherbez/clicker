@@ -1,6 +1,6 @@
 # Clicker
 
-## Play it here!
+## Result
 
 ![clicker screenshot](http://www.adrianherbez.net/clicker/imgs/screenshot.png)
 

@@ -7,13 +7,15 @@
                 "name": "Sweeter Lemons",
                 "desc": "*Sweet* lemons?!?. Lemonade Stand revenue 1.25x",
                 "effects": [[1, 1, 1.25]],
+                "requirements": [1],
                 "cost": 200
             },
             {
                 "id": "2",
-                "name": "beter paper",
+                "name": "Better Paper",
                 "desc": "Customers prefer high-sheen news. Newspaper revenue 1.25x",
                 "effects": [[2, 1, 1.25]],
+                "requirements": [2],
                 "cost": 1000
             },
             {
@@ -21,6 +23,7 @@
                 "name": "Coffee. The GOOD stuff",
                 "desc": "All businesses speed 2x",
                 "effects": [[-1, 3, 0.5]],
+                "requirements": [3],
                 "cost": 20000
             }
         ]
